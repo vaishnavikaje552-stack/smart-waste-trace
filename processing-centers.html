@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing Centers | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">Certified Processing Facilities</div>
+            <div class="content-header-subtitle">
+              Monitor municipal waste processing centers, active capacity utilization, and regulatory compliance.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <button class="btn btn-primary" onclick="openAddCenterModal()">
+              <i class="fa-solid fa-plus-circle"></i> Register Processing Center
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric summary cards -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card stat-primary">
+            <div>
+              <div class="stat-label">Active Facilities</div>
+              <div class="stat-value">6</div>
+              <div class="stat-meta"><i class="fa-solid fa-check text-success"></i> 100% MPCB Compliant</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-industry"></i></div>
+          </div>
+
+          <div class="stat-card stat-success">
+            <div>
+              <div class="stat-label">Total Daily Capacity</div>
+              <div class="stat-value" style="font-size: 1.5rem;">43,500 kg</div>
+              <div class="stat-meta"><i class="fa-solid fa-scale-balanced text-primary"></i> Municipal Grid</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-weight-scale"></i></div>
+          </div>
+
+          <div class="stat-card stat-warning">
+            <div>
+              <div class="stat-label">Current Grid Load</div>
+              <div class="stat-value" style="font-size: 1.5rem;">32,200 kg</div>
+              <div class="stat-meta"><i class="fa-solid fa-chart-line text-warning"></i> 74% Aggregate Utilization</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-gauge"></i></div>
+          </div>
+
+          <div class="stat-card stat-purple">
+            <div>
+              <div class="stat-label">Batches Processed</div>
+              <div class="stat-value">238</div>
+              <div class="stat-meta"><i class="fa-solid fa-recycle" style="color: #8b5cf6;"></i> This Month</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+          </div>
+        </div>
+
+        <!-- Processing Centers Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;" id="processing-centers-container">
+          <!-- Populated by processing.js -->
+        </div>
+
+        <!-- Register Processing Center Modal -->
+        <div class="modal-backdrop" id="add-center-modal">
+          <div class="modal-dialog">
+            <div class="modal-header">
+              <h3 class="card-title">
+                <i class="fa-solid fa-industry text-primary"></i> Register Processing Center
+              </h3>
+              <button class="btn btn-ghost btn-sm" onclick="closeAddCenterModal()">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <form id="add-center-form">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label class="form-label" for="center-name">Facility Name <span class="required">*</span></label>
+                  <input type="text" id="center-name" class="form-control" placeholder="e.g. Pune Bio-Energy MRF Hub" required>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="center-type">Processing Technology / Type <span class="required">*</span></label>
+                    <input type="text" id="center-type" class="form-control" placeholder="e.g. Biomethanation &amp; Bio-CNG" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="center-capacity">Daily Capacity (kg) <span class="required">*</span></label>
+                    <input type="number" id="center-capacity" class="form-control" placeholder="e.g. 7500" min="100" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="center-location">Physical Location / Address <span class="required">*</span></label>
+                  <input type="text" id="center-location" class="form-control" placeholder="e.g. Bhosari Industrial Sector 5, Pune" required>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="center-auth-code">Authorization License Code</label>
+                    <input type="text" id="center-auth-code" class="form-control mono" placeholder="e.g. MPCB-AUT-2026-99">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="center-contact">Plant Manager / Contact</label>
+                    <input type="text" id="center-contact" class="form-control" placeholder="e.g. Anand Kulkarni">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddCenterModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Processing Facility</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/processing.js"></script>
+</body>
+</html>

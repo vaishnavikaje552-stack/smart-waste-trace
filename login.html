@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      background-color: var(--bg-app);
+    }
+    .login-banner {
+      flex: 1.1;
+      background: linear-gradient(135deg, var(--primary-900) 0%, #0d3d28 60%, #062b1b 100%);
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      position: relative;
+    }
+    .login-banner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .login-form-pane {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px;
+      background: #ffffff;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 440px;
+    }
+    .demo-pill-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px dashed var(--slate-300);
+      background: var(--slate-50);
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-bottom: 8px;
+      text-align: left;
+    }
+    .demo-pill-btn:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-400);
+      border-style: solid;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .password-toggle-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--slate-400);
+      cursor: pointer;
+      padding: 4px;
+    }
+    @media (max-width: 900px) {
+      .login-banner { display: none; }
+      .login-form-pane { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <!-- Left Hero Banner -->
+    <div class="login-banner">
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-recycle"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Smart Waste <span>Trace</span></span>
+          <span class="brand-tagline">Track • Verify • Transform</span>
+        </div>
+      </a>
+
+      <div style="max-width: 520px; z-index: 2;">
+        <span class="badge badge-low" style="margin-bottom: 16px; background: rgba(16, 185, 129, 0.2); color: var(--primary-300); border-color: rgba(16, 185, 129, 0.4);">
+          <i class="fa-solid fa-leaf"></i> Municipal Clean Technology
+        </span>
+        <h2 style="font-size: 2.2rem; color: #ffffff; font-weight: 800; line-height: 1.2; margin-bottom: 16px;">
+          Authentic Traceability for Urban Waste Management
+        </h2>
+        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px;">
+          Access the municipal command dashboard, verify digital chain of custody from source to processing center, and track simulated AI discrepancy alerts.
+        </p>
+
+        <div style="display: flex; gap: 24px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 24px;">
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-300);">100%</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Digital Passports</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-300);">6 Stages</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Chain of Custody</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-300);">AI Guard</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Discrepancy Alerts</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.75rem; color: #64748b; z-index: 2;">
+        © 2026 Smart Waste Trace • Municipal Waste Traceability &amp; Verification System.
+      </div>
+    </div>
+
+    <!-- Right Login Form -->
+    <div class="login-form-pane">
+      <div class="login-box">
+        <div style="margin-bottom: 28px;">
+          <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--slate-900);">Sign In to Portal</h2>
+          <p style="font-size: 0.88rem; color: var(--slate-500); margin-top: 4px;">
+            Enter your credentials or choose a 1-click demo role below.
+          </p>
+        </div>
+
+        <!-- 1-Click Demo Credential Chooser -->
+        <div style="margin-bottom: 22px;">
+          <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--slate-500); margin-bottom: 8px;">
+            <i class="fa-solid fa-bolt text-warning"></i> Fast Demo Login (1-Click)
+          </div>
+          <button type="button" class="demo-pill-btn" onclick="fillDemoCredentials('admin')">
+            <div>
+              <div style="font-weight: 700; color: var(--slate-900);">
+                <i class="fa-solid fa-user-tie text-primary" style="margin-right: 6px;"></i> Municipal Admin
+              </div>
+              <div style="font-size: 0.75rem; color: var(--slate-500);">admin@smartwastetrace.gov.in</div>
+            </div>
+            <span class="badge badge-completed">Full Access</span>
+          </button>
+          <button type="button" class="demo-pill-btn" onclick="fillDemoCredentials('operator')">
+            <div>
+              <div style="font-weight: 700; color: var(--slate-900);">
+                <i class="fa-solid fa-industry text-primary" style="margin-right: 6px;"></i> Processing Operator
+              </div>
+              <div style="font-size: 0.75rem; color: var(--slate-500);">operator@ecocompost.in</div>
+            </div>
+            <span class="badge badge-low">Plant Ops</span>
+          </button>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address <span class="required">*</span></label>
+            <input type="email" id="login-email" class="form-control" placeholder="name@smartwastetrace.gov.in" required>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" for="login-password" style="margin-bottom: 0;">Password <span class="required">*</span></label>
+              <a href="javascript:void(0)" onclick="showToast('Password reset link simulated to registered email.', 'info')" style="font-size: 0.75rem;">Forgot password?</a>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+              <button type="button" class="password-toggle-btn" id="toggle-password-btn" title="Show/Hide Password">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;">
+            <label class="form-check">
+              <input type="checkbox" id="login-remember" class="form-check-input" checked>
+              <span style="font-size: 0.82rem; color: var(--slate-600);">Remember me on this browser</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem;">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 0.82rem; color: var(--slate-500);">
+          Need municipal access credentials? <a href="javascript:void(0)" onclick="showToast('Please contact PMC SWM IT Administrator for registration.', 'info')">Contact Administrator</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect to dashboard
+      const user = AuthService.getUser();
+      if (user) {
+        window.location.href = 'dashboard.html';
+      }
+
+      // Password visibility toggle
+      const pwdInput = document.getElementById('login-password');
+      const toggleBtn = document.getElementById('toggle-password-btn');
+      toggleBtn.addEventListener('click', () => {
+        const isPwd = pwdInput.type === 'password';
+        pwdInput.type = isPwd ? 'text' : 'password';
+        toggleBtn.innerHTML = isPwd ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+      });
+
+      // Handle form submit
+      const form = document.getElementById('login-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const role = email.toLowerCase().includes('admin') ? 'admin' : 'operator';
+
+        const res = AuthService.login(email, password, role);
+        if (res.success) {
+          showToast(`Welcome back, ${res.user.name}! Accessing ${res.user.roleLabel}...`, 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 600);
+        }
+      });
+    });
+
+    function fillDemoCredentials(role) {
+      const emailInput = document.getElementById('login-email');
+      const pwdInput = document.getElementById('login-password');
+      if (role === 'admin') {
+        emailInput.value = 'admin@smartwastetrace.gov.in';
+        pwdInput.value = 'admin123';
+      } else {
+        emailInput.value = 'operator@ecocompost.in';
+        pwdInput.value = 'operator123';
+      }
+      showToast(`Filled ${role === 'admin' ? 'Municipal Admin' : 'Processing Operator'} demo credentials. Click Sign In.`, 'info');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Waste Trace | Track. Verify. Transform.</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .hero-section {
+      min-height: 100vh;
+      background: radial-gradient(circle at top right, #0d3d28 0%, #062b1b 60%, #03170e 100%);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-nav {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .hero-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .hero-card {
+      max-width: 840px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      padding: 48px 40px;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--primary-300);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary-400), #a7f3d0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      max-width: 650px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+    .hero-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+      text-align: left;
+    }
+    .hero-feat-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px;
+      border-radius: var(--radius-md);
+    }
+    .hero-feat-item i {
+      color: var(--primary-400);
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .hero-feat-item h4 {
+      color: #ffffff;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .hero-feat-item p {
+      color: #94a3b8;
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-section">
+    <nav class="hero-nav">
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-recycle"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Smart Waste <span>Trace</span></span>
+          <span class="brand-tagline">Track • Verify • Transform</span>
+        </div>
+      </a>
+
+      <div style="display: flex; gap: 12px;">
+        <a href="login.html" class="btn btn-secondary btn-sm" style="background: transparent; color: #fff; border-color: rgba(255,255,255,0.3);">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
+        </a>
+        <a href="dashboard.html" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-gauge-high"></i> Open Dashboard
+        </a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-card">
+        <div class="hero-badge">
+          <i class="fa-solid fa-shield-halved"></i> Municipal Compliance & Digital Custody
+        </div>
+        <h1 class="hero-title">
+          Smart Waste Traceability &amp; <span>Verification System</span>
+        </h1>
+        <p class="hero-desc">
+          An end-to-end municipal platform for tracking waste batches, verifying digital chains of custody, scanning QR passports, and identifying high-risk journey anomalies with AI monitoring.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+          <a href="login.html" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Portal
+          </a>
+          <button class="btn btn-secondary btn-lg" onclick="loginDirect('admin')" style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25);">
+            <i class="fa-solid fa-user-tie"></i> Demo as Municipal Admin
+          </button>
+          <button class="btn btn-secondary btn-lg" onclick="loginDirect('operator')" style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25);">
+            <i class="fa-solid fa-industry"></i> Demo as Processing Operator
+          </button>
+        </div>
+
+        <div class="hero-features">
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-passport"></i>
+            <h4>Waste Digital Passport</h4>
+            <p>Cryptographically verified batch identity with embedded QR codes & metrics.</p>
+          </div>
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-timeline"></i>
+            <h4>Digital Chain of Custody</h4>
+            <p>Chronological tracking across 6 custodial milestones from collection to recovery.</p>
+          </div>
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-brain"></i>
+            <h4>AI Risk Detection</h4>
+            <p>Simulated detection of quantity deficits, missing confirmations & route deviations.</p>
+          </div>
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-gauge-high"></i>
+            <h4>Integrity Score</h4>
+            <p>Algorithmic trustworthiness index calculated on 4 municipal audit factors.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    function loginDirect(role) {
+      AuthService.login(role === 'admin' ? 'admin@smartwastetrace.gov.in' : 'operator@ecocompost.in', 'demo123', role);
+      showToast(`Logged in as ${role === 'admin' ? 'Municipal Admin' : 'Processing Center Operator'}! Redirecting...`, 'success');
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 500);
+    }
+
+    // Auto-redirect if already authenticated
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = AuthService.getUser();
+      if (user) {
+        // Can optionally auto redirect, or leave landing accessible
+      }
+    });
+  </script>
+</body>
+</html>

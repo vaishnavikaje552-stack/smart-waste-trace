@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waste Journey Integrity Score | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">Waste Journey Integrity Score</div>
+            <div class="content-header-subtitle">
+              Multi-factor algorithmic verification assessing quantity fidelity, destination adherence, and processing proof.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <span class="simulated-pill"><i class="fa-solid fa-calculator"></i> Simulated Scoring Algorithm</span>
+          </div>
+        </div>
+
+        <!-- Batch Picker Bar -->
+        <div class="filter-bar">
+          <div class="filter-group" style="flex: 1;">
+            <label class="form-label" style="margin-bottom: 0; margin-right: 8px;">Select Batch to Audit Integrity:</label>
+            <select id="integrity-batch-picker" class="form-select" style="max-width: 440px;">
+              <!-- Populated by integrity.js -->
+            </select>
+          </div>
+          <div class="filter-group">
+            <a href="#" id="btn-view-passport-from-integrity" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-passport"></i> View Digital Passport
+            </a>
+            <a href="#" id="btn-view-coc-from-integrity" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-timeline"></i> View Chain of Custody
+            </a>
+          </div>
+        </div>
+
+        <!-- Main Scoring Layout -->
+        <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 24px;" class="dashboard-grid-main">
+          <!-- Left: Big Circular Dial Card -->
+          <div class="card text-center" style="padding: 24px;">
+            <div class="card-header" style="justify-content: center; border: none; padding-bottom: 0;">
+              <div>
+                <span class="mono" style="font-weight: 800; font-size: 1.25rem; color: var(--slate-900);" id="int-batch-id">WB-0001</span>
+                <div style="font-size: 0.8rem; color: var(--slate-500); margin-top: 2px;">
+                  <span id="int-waste-type">Organic</span> • <span id="int-qty">500 kg</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body" style="padding-top: 10px;">
+              <div class="integrity-dial-wrapper" style="width: 200px; height: 200px; margin: 10px auto 20px;">
+                <svg class="integrity-dial-svg" viewBox="0 0 160 160">
+                  <circle class="integrity-dial-bg" cx="80" cy="80" r="70" />
+                  <circle class="integrity-dial-progress" id="integrity-svg-circle" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="44" />
+                </svg>
+                <div class="integrity-dial-center">
+                  <div class="integrity-dial-number" id="main-integrity-num" style="font-size: 2.8rem;">95</div>
+                  <div class="integrity-dial-label">Score / 100</div>
+                </div>
+              </div>
+
+              <div>
+                <span id="main-integrity-cat" class="badge badge-completed" style="font-size: 0.95rem; padding: 6px 16px;">
+                  Exceptional Trust
+                </span>
+              </div>
+
+              <div style="margin-top: 20px; font-size: 0.82rem; color: var(--slate-600); border-top: 1px solid var(--border-color); padding-top: 16px; text-align: left;">
+                <div><strong>Assigned Center:</strong> <span id="int-center">Pune Eco-Compost Facility</span></div>
+                <div style="margin-top: 4px;"><strong>Regulatory Audit:</strong> Certified compliant with PMC Urban SWM Norms.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: The 4 Core Audit Factors Breakdown -->
+          <div>
+            <div class="card" style="margin-bottom: 24px;">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-list-check text-primary"></i> 4-Factor Integrity Score Breakdown
+                </div>
+                <span class="badge badge-low">100 Points Total</span>
+              </div>
+              <div class="card-body">
+                <!-- Factor 1: Quantity Consistency (30 pts) -->
+                <div style="margin-bottom: 20px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <div>
+                      <span style="font-weight: 700; font-size: 0.9rem; color: var(--slate-900);">1. Quantity Consistency</span>
+                      <span style="font-size: 0.75rem; color: var(--slate-500); margin-left: 6px;">(30 pts max)</span>
+                    </div>
+                    <span id="f1-val" style="font-weight: 700; font-size: 0.85rem; color: var(--primary-700);">30 / 30 pts (100%)</span>
+                  </div>
+                  <p style="font-size: 0.78rem; color: var(--slate-600); margin-bottom: 6px;">
+                    Compares collection mass against receiving weighbridge mass. Penalizes mass loss exceeding standard moisture evaporation.
+                  </p>
+                  <div class="progress-track"><div id="f1-bar" class="progress-fill progress-fill-emerald" style="width: 100%;"></div></div>
+                </div>
+
+                <!-- Factor 2: Destination Verification (25 pts) -->
+                <div style="margin-bottom: 20px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <div>
+                      <span style="font-weight: 700; font-size: 0.9rem; color: var(--slate-900);">2. Destination Verification</span>
+                      <span style="font-size: 0.75rem; color: var(--slate-500); margin-left: 6px;">(25 pts max)</span>
+                    </div>
+                    <span id="f2-val" style="font-weight: 700; font-size: 0.85rem; color: var(--primary-700);">25 / 25 pts (100%)</span>
+                  </div>
+                  <p style="font-size: 0.78rem; color: var(--slate-600); margin-bottom: 6px;">
+                    Validates vehicle arrival at the certified facility against planned municipal routes; penalizes unauthorized drop-offs.
+                  </p>
+                  <div class="progress-track"><div id="f2-bar" class="progress-fill progress-fill-blue" style="width: 100%;"></div></div>
+                </div>
+
+                <!-- Factor 3: Journey Completion (25 pts) -->
+                <div style="margin-bottom: 20px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <div>
+                      <span style="font-weight: 700; font-size: 0.9rem; color: var(--slate-900);">3. Journey Completion</span>
+                      <span style="font-size: 0.75rem; color: var(--slate-500); margin-left: 6px;">(25 pts max)</span>
+                    </div>
+                    <span id="f3-val" style="font-weight: 700; font-size: 0.85rem; color: var(--primary-700);">25 / 25 pts (100%)</span>
+                  </div>
+                  <p style="font-size: 0.78rem; color: var(--slate-600); margin-bottom: 6px;">
+                    Checks chronological progression across all 6 custodial milestones without unexplained delays or skipped handoffs.
+                  </p>
+                  <div class="progress-track"><div id="f3-bar" class="progress-fill progress-fill-amber" style="width: 100%;"></div></div>
+                </div>
+
+                <!-- Factor 4: Processing Verification (20 pts) -->
+                <div style="margin-bottom: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <div>
+                      <span style="font-weight: 700; font-size: 0.9rem; color: var(--slate-900);">4. Processing Verification</span>
+                      <span style="font-size: 0.75rem; color: var(--slate-500); margin-left: 6px;">(20 pts max)</span>
+                    </div>
+                    <span id="f4-val" style="font-weight: 700; font-size: 0.85rem; color: var(--primary-700);">20 / 20 pts (100%)</span>
+                  </div>
+                  <p style="font-size: 0.78rem; color: var(--slate-600); margin-bottom: 6px;">
+                    Requires authorized plant operator electronic signoff, method confirmation (Composting/Recycling), and final yield telemetry.
+                  </p>
+                  <div class="progress-track"><div id="f4-bar" class="progress-fill progress-fill-purple" style="width: 100%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Algorithmic Deductions & Explanations Card -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-brain text-primary"></i> Evaluator Audit Findings &amp; Deductions
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="integrity-explanations-list">
+                  <!-- Populated by integrity.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/integrity.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waste Batch Management | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">Waste Batch Registry</div>
+            <div class="content-header-subtitle">
+              Manage, search, and monitor municipal waste batches from origin to disposal.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <button class="btn btn-secondary" onclick="exportBatchesToCSV()">
+              <i class="fa-solid fa-file-csv"></i> Export CSV
+            </button>
+            <a href="create-batch.html" class="btn btn-primary">
+              <i class="fa-solid fa-plus-circle"></i> Create New Batch
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="filter-group" style="flex: 1; min-width: 240px;">
+            <div style="position: relative; width: 100%;">
+              <input type="text" id="batch-search-input" class="form-control" placeholder="Search Batch ID, Location, Vehicle, Center..." style="padding-left: 36px;">
+              <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--slate-400);"></i>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <select id="filter-waste-type" class="form-select" style="width: 160px;">
+              <option value="">All Waste Types</option>
+              <option value="Organic">Organic</option>
+              <option value="Plastic">Plastic</option>
+              <option value="Paper">Paper</option>
+              <option value="Metal">Metal</option>
+              <option value="E-Waste">E-Waste</option>
+              <option value="Mixed Waste">Mixed Waste</option>
+            </select>
+
+            <select id="filter-status" class="form-select" style="width: 170px;">
+              <option value="">All Statuses</option>
+              <option value="Completed">Completed</option>
+              <option value="In-Transit">In-Transit</option>
+              <option value="Discrepancy Flagged">Discrepancy Flagged</option>
+            </select>
+
+            <select id="filter-risk" class="form-select" style="width: 150px;">
+              <option value="">All Risk Levels</option>
+              <option value="Low">Low Risk</option>
+              <option value="Medium">Medium Risk</option>
+              <option value="High">High Risk</option>
+            </select>
+
+            <button class="btn btn-secondary btn-sm" onclick="resetFilters()" title="Reset Filters">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Batch Count & Status Alert -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <span id="batch-count-display" style="font-size: 0.85rem; font-weight: 700; color: var(--slate-600);">
+            Showing batches...
+          </span>
+          <span style="font-size: 0.78rem; color: var(--slate-400);">
+            <i class="fa-solid fa-lock text-success"></i> SHA-256 Mocked Hash Records
+          </span>
+        </div>
+
+        <!-- Data Table Card -->
+        <div class="card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Batch ID</th>
+                  <th>Waste Type</th>
+                  <th>Collected Qty</th>
+                  <th>Location &amp; Date</th>
+                  <th>Vehicle</th>
+                  <th>Assigned Center</th>
+                  <th>Status</th>
+                  <th>Risk Level</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="batches-tbody">
+                <!-- Populated by batches.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/batches.js"></script>
+</body>
+</html>

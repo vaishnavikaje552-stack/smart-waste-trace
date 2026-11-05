@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Chain of Custody | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">Digital Chain of Custody Timeline</div>
+            <div class="content-header-subtitle">
+              End-to-end chronological traceability across 6 certified municipal transfer stages.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <button class="btn btn-secondary" onclick="openAddMilestoneModal()">
+              <i class="fa-solid fa-stamp"></i> Add Inspection Stamp
+            </button>
+            <button class="btn btn-secondary" onclick="window.print()">
+              <i class="fa-solid fa-print"></i> Print Timeline
+            </button>
+          </div>
+        </div>
+
+        <!-- Batch Selector Filter Bar -->
+        <div class="filter-bar">
+          <div class="filter-group" style="flex: 1;">
+            <label class="form-label" style="margin-bottom: 0; margin-right: 8px;">Select Batch to Inspect:</label>
+            <select id="custody-batch-select" class="form-select" style="max-width: 420px;">
+              <!-- Populated by journey.js -->
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="simulated-pill"><i class="fa-solid fa-link"></i> Immutable Custody Log</span>
+          </div>
+        </div>
+
+        <!-- Active Batch Overview Strip -->
+        <div class="card" style="margin-bottom: 24px; background: var(--white); border-left: 5px solid var(--primary-600);">
+          <div class="card-body" style="padding: 18px 24px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span class="mono" style="font-size: 1.4rem; font-weight: 800; color: var(--primary-900);" id="coc-batch-id-heading">WB-0001</span>
+                  <span class="badge badge-low" id="coc-risk-badge"><span class="badge-dot"></span>Low Risk</span>
+                  <span class="badge badge-completed" id="coc-status-badge"><span class="badge-dot"></span>Completed</span>
+                </div>
+                <div style="font-size: 0.82rem; color: var(--slate-500); margin-top: 4px;">
+                  Waste Type: <strong id="coc-waste-type" style="color: var(--slate-800);">Organic</strong> • 
+                  Gross Weight: <strong id="coc-collected-qty" style="color: var(--slate-800);">500 kg</strong> • 
+                  Fleet Vehicle: <strong id="coc-vehicle" class="mono" style="color: var(--slate-800);">MH12AB1234</strong>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size: 0.72rem; color: var(--slate-400); text-transform: uppercase; font-weight: 700;">Assigned Facility</div>
+                <div style="font-size: 0.95rem; font-weight: 700; color: var(--slate-900);" id="coc-center">Pune Eco-Compost Facility</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Stages Chronological Visual Timeline -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-timeline text-primary"></i> 6-Stage Custodial Milestones
+            </div>
+            <div style="display: flex; gap: 12px; font-size: 0.75rem;">
+              <span style="color: var(--success);"><i class="fa-solid fa-circle"></i> Completed</span>
+              <span style="color: var(--warning);"><i class="fa-solid fa-circle"></i> In Progress</span>
+              <span style="color: var(--danger);"><i class="fa-solid fa-circle"></i> Flagged Anomaly</span>
+              <span style="color: var(--slate-400);"><i class="fa-solid fa-circle"></i> Pending</span>
+            </div>
+          </div>
+
+          <div class="card-body" style="padding: 32px 28px;">
+            <div class="custody-timeline" id="custody-timeline-container">
+              <!-- Populated by journey.js -->
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/journey.js"></script>
+</body>
+</html>

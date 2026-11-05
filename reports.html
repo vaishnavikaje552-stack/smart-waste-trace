@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports &amp; Analytics | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">Municipal Reports &amp; Regulatory Audits</div>
+            <div class="content-header-subtitle">
+              Generate certified compliance reports, discrepancy breakdowns, and exportable CSV manifests.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <button class="btn btn-secondary" onclick="printReport()">
+              <i class="fa-solid fa-print"></i> Print Report
+            </button>
+            <button class="btn btn-primary" onclick="downloadReportCSV()">
+              <i class="fa-solid fa-file-arrow-down"></i> Download CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Controls Bar -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label class="form-label" style="margin-bottom: 0; margin-right: 6px;">Report Type:</label>
+            <select id="report-type-select" class="form-select" style="min-width: 240px;">
+              <option value="all">Daily &amp; Monthly Collection Report</option>
+              <option value="discrepancy">Quantity Discrepancy Report</option>
+              <option value="suspicious">Suspicious Journey &amp; Deviation Report</option>
+              <option value="completed">Certified Completed Batches Report</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="form-label" style="margin-bottom: 0; margin-right: 6px;">Waste Type:</label>
+            <select id="report-waste-type" class="form-select" style="width: 160px;">
+              <option value="">All Categories</option>
+              <option value="Organic">Organic</option>
+              <option value="Plastic">Plastic</option>
+              <option value="Paper">Paper</option>
+              <option value="Metal">Metal</option>
+              <option value="E-Waste">E-Waste</option>
+              <option value="Mixed Waste">Mixed Waste</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="form-label" style="margin-bottom: 0; margin-right: 6px;">From:</label>
+            <input type="date" id="report-from-date" class="form-control" style="width: 145px;">
+            <label class="form-label" style="margin-bottom: 0; margin-left: 6px; margin-right: 6px;">To:</label>
+            <input type="date" id="report-to-date" class="form-control" style="width: 145px;">
+          </div>
+
+          <div class="filter-group">
+            <button class="btn btn-secondary btn-sm" id="btn-apply-report-filters">
+              <i class="fa-solid fa-filter"></i> Apply Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary KPIs Row -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div>
+              <div class="stat-label">Manifest Batches</div>
+              <div class="stat-value" id="rep-count">0</div>
+              <div class="stat-meta">In Selected Scope</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+          </div>
+
+          <div class="stat-card stat-success">
+            <div>
+              <div class="stat-label">Total Mass Intake</div>
+              <div class="stat-value" id="rep-total-collected" style="font-size: 1.5rem;">0 kg</div>
+              <div class="stat-meta"><i class="fa-solid fa-arrow-down-wide-short text-success"></i> Gross Collected</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+          </div>
+
+          <div class="stat-card stat-primary">
+            <div>
+              <div class="stat-label">Verified Recovery</div>
+              <div class="stat-value" id="rep-total-processed" style="font-size: 1.5rem;">0 kg</div>
+              <div class="stat-meta"><i class="fa-solid fa-recycle text-primary"></i> Processed Yield</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-industry"></i></div>
+          </div>
+
+          <div class="stat-card stat-purple">
+            <div>
+              <div class="stat-label">Average Integrity</div>
+              <div class="stat-value" id="rep-avg-integrity">0 / 100</div>
+              <div class="stat-meta"><i class="fa-solid fa-gauge text-primary"></i> Batch Quality Index</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-medal"></i></div>
+          </div>
+        </div>
+
+        <!-- Facility Mass Chart -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <i class="fa-solid fa-chart-simple text-primary"></i> Facility Inflow vs Processed Output Mass
+              </div>
+              <div class="card-subtitle">Mass comparison across certified processing facilities</div>
+            </div>
+            <span class="badge badge-low"><i class="fa-solid fa-scale-balanced"></i> Mass-Balance Auditing</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 300px;">
+              <canvas id="reportVisualChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Audit Table -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <i class="fa-solid fa-table text-primary"></i> Filtered Manifest Data Table
+              </div>
+              <div class="card-subtitle">Included in CSV and Print Export</div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Batch ID</th>
+                  <th>Waste Type</th>
+                  <th>Collected Qty</th>
+                  <th>Received Qty</th>
+                  <th>Processed Qty</th>
+                  <th>Discrepancy</th>
+                  <th>Risk Level</th>
+                  <th>Integrity</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="report-table-tbody">
+                <!-- Populated by reports.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/reports.js"></script>
+</body>
+</html>

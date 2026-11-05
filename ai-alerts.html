@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Risk Alerts &amp; Journey Detection | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .filter-risk-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .filter-risk-btn:hover {
+      background: var(--slate-100);
+      color: var(--slate-900);
+    }
+    .filter-risk-btn.active {
+      background: var(--slate-900);
+      color: #ffffff;
+      border-color: var(--slate-900);
+    }
+    .filter-risk-btn[data-risk="high"].active {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+    .filter-risk-btn[data-risk="medium"].active {
+      background: var(--warning);
+      border-color: var(--warning);
+    }
+    .filter-risk-btn[data-risk="low"].active {
+      background: var(--info);
+      border-color: var(--info);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">AI Risk Alerts &amp; Suspicious Journey Detection</div>
+            <div class="content-header-subtitle">
+              Automated pattern detection for route diversions, mass discrepancies, and delayed consignments.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <span class="simulated-banner" style="margin-bottom: 0;">
+              <i class="fa-solid fa-robot text-primary"></i> <strong>Simulation Notice:</strong> Demonstrating frontend algorithmic alert heuristics.
+            </span>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div>
+              <div class="stat-label">Total Monitored Alerts</div>
+              <div class="stat-value" id="stat-alert-total">6</div>
+              <div class="stat-meta"><i class="fa-solid fa-bell text-primary"></i> System Triggers</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-shield-virus"></i></div>
+          </div>
+
+          <div class="stat-card stat-danger">
+            <div>
+              <div class="stat-label">High Risk Incidents</div>
+              <div class="stat-value" id="stat-alert-high">3</div>
+              <div class="stat-meta"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Immediate Review</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
+          </div>
+
+          <div class="stat-card stat-warning">
+            <div>
+              <div class="stat-label">Pending Review</div>
+              <div class="stat-value" id="stat-alert-unreviewed">4</div>
+              <div class="stat-meta"><i class="fa-solid fa-clock text-warning"></i> Open Investigations</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+          </div>
+
+          <div class="stat-card stat-success">
+            <div>
+              <div class="stat-label">Reviewed / Resolved</div>
+              <div class="stat-value" id="stat-alert-resolved">2</div>
+              <div class="stat-meta"><i class="fa-solid fa-circle-check text-success"></i> Audit Cleared</div>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--slate-600); margin-right: 6px;">Risk Category:</span>
+            <button class="filter-risk-btn active" data-risk="all">All Alerts</button>
+            <button class="filter-risk-btn" data-risk="high"><i class="fa-solid fa-circle text-danger" style="font-size: 0.6rem;"></i> High Risk</button>
+            <button class="filter-risk-btn" data-risk="medium"><i class="fa-solid fa-circle text-warning" style="font-size: 0.6rem;"></i> Medium Risk</button>
+            <button class="filter-risk-btn" data-risk="low"><i class="fa-solid fa-circle text-info" style="font-size: 0.6rem;"></i> Low Risk</button>
+          </div>
+
+          <div class="filter-group">
+            <label class="form-label" style="margin-bottom: 0; margin-right: 8px;">Review Status:</label>
+            <select id="filter-review-status" class="form-select" style="width: 180px;">
+              <option value="all">All Review States</option>
+              <option value="unreviewed">Action Required (Unreviewed)</option>
+              <option value="reviewed">Audited &amp; Reviewed</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Alerts Cards Container -->
+        <div id="alerts-cards-container">
+          <!-- Populated by alerts.js -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/alerts.js"></script>
+</body>
+</html>

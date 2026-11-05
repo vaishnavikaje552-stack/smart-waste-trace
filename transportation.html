@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transportation &amp; Journey Updates | Smart Waste Trace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="app-sidebar-container"></div>
+
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="app-content">
+        <!-- Header -->
+        <div class="content-header">
+          <div>
+            <div class="content-header-title">Transportation &amp; Journey Telemetry</div>
+            <div class="content-header-subtitle">
+              Record live vehicular transit legs, geofence milestones, and delivery handoffs.
+            </div>
+          </div>
+          <div class="content-header-actions">
+            <span class="simulated-pill"><i class="fa-solid fa-satellite"></i> GPS Simulation Active</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.8fr; gap: 24px;" class="dashboard-grid-main">
+          <!-- Left: Record Transportation Update Form -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-route text-primary"></i> Log Transportation Update
+              </div>
+              <span class="badge badge-low">Field Checkpoint</span>
+            </div>
+            <div class="card-body">
+              <form id="transport-update-form">
+                <div class="form-group">
+                  <label class="form-label" for="tr-batch-id">Batch ID <span class="required">*</span></label>
+                  <select id="tr-batch-id" class="form-select" required>
+                    <!-- Populated by transportation.js -->
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="tr-vehicle">Vehicle Number <span class="required">*</span></label>
+                    <input type="text" id="tr-vehicle" class="form-control mono" placeholder="e.g. MH12AB1234" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="tr-status">Transfer Status <span class="required">*</span></label>
+                    <select id="tr-status" class="form-select" required>
+                      <option value="In-Transit">In-Transit (Normal)</option>
+                      <option value="Delivered">Delivered &amp; Unloaded</option>
+                      <option value="Delayed">Delayed / Stationary</option>
+                      <option value="Route Deviation">Route Deviation Flagged</option>
+                      <option value="Disputed Delivery">Disputed Weighment</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="tr-location">Current Location / Checkpoint <span class="required">*</span></label>
+                    <input type="text" id="tr-location" class="form-control" placeholder="e.g. Hadapsar Bypass Checkpoint" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="tr-destination">Destination Facility <span class="required">*</span></label>
+                    <input type="text" id="tr-destination" class="form-control" placeholder="e.g. Pune Eco-Compost Facility" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="tr-departure-time">Departure Timestamp</label>
+                    <input type="text" id="tr-departure-time" class="form-control" placeholder="YYYY-MM-DD HH:MM">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="tr-arrival-time">Arrival Timestamp (or Est.)</label>
+                    <input type="text" id="tr-arrival-time" class="form-control" placeholder="Pending / HH:MM">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="tr-notes">Driver / Custody Log Notes</label>
+                  <textarea id="tr-notes" class="form-control" rows="2" placeholder="e.g. Green corridor transit, cargo seal #A890 intact."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                  <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Record Journey Checkpoint
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right: Live Fleet Corridor Map Simulation & Info -->
+          <div>
+            <div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, #092c1e 0%, #0d3d28 100%); color: #ffffff;">
+              <div class="card-header" style="border-bottom: 1px solid rgba(255,255,255,0.15);">
+                <div class="card-title" style="color: #ffffff;">
+                  <i class="fa-solid fa-map-location-dot text-primary"></i> Municipal Green Transit Corridor (Pune Hub)
+                </div>
+                <span class="badge badge-low" style="background: rgba(16, 185, 129, 0.2); color: var(--primary-300);">Live Geofence</span>
+              </div>
+              <div class="card-body">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 18px; text-align: center;">
+                  <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: var(--radius-md);">
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-300);">4</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">Active En Route</div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: var(--radius-md);">
+                    <div style="font-size: 1.4rem; font-weight: 800; color: #facc15;">1</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">Stationary / Delayed</div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: var(--radius-md);">
+                    <div style="font-size: 1.4rem; font-weight: 800; color: #f87171;">1</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">Route Deviation</div>
+                  </div>
+                </div>
+
+                <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.5;">
+                  Vehicles are simulated to emit breadcrumbs every 10 minutes. Any deviations outside approved municipal corridors automatically flag the batch for AI review.
+                </p>
+              </div>
+            </div>
+
+            <!-- Transportation Records Table -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-clock-rotate-left text-primary"></i> Transportation Checkpoint Registry
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Batch ID</th>
+                      <th>Vehicle</th>
+                      <th>Current Location</th>
+                      <th>Destination</th>
+                      <th>Departure</th>
+                      <th>Arrival</th>
+                      <th>Transfer Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transport-tbody">
+                    <!-- Populated by transportation.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/transportation.js"></script>
+</body>
+</html>
