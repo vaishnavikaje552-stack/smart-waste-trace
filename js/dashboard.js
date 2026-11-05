@@ -1,42 +1,77 @@
 /**
  * SMART WASTE TRACE - DASHBOARD CONTROLLER
- * Renders statistical cards, Chart.js analytics, recent tables, and quick actions.
+ * Supports separate role-specific dashboards:
+ * 1. Municipal Admin: Executive oversight, city-wide telemetry, AI alerts, compliance charts.
+ * 2. Processing Center Operator: Plant operations, batch intake creation, weighbridge receipts, facility throughput.
  */
 
 let collectionChartInstance = null;
 let distributionChartInstance = null;
+let operatorChartInstance = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  AuthService.requireAuth();
+  const user = AuthService.requireAuth();
+  if (!user) return;
+
   initAppShell('dashboard');
-  loadDashboardData();
+  loadDashboardData(user);
 });
 
-function loadDashboardData() {
-  const stats = DataStore.getStatsSummary();
+function loadDashboardData(user) {
   const batches = DataStore.getBatches();
   const alerts = DataStore.getAlerts();
 
-  // Populate Statistics Cards
-  document.getElementById('stat-total-batches').textContent = stats.totalBatches;
-  document.getElementById('stat-completed-batches').textContent = stats.completedBatches;
-  document.getElementById('stat-intransit-batches').textContent = stats.inTransitBatches;
-  document.getElementById('stat-highrisk-batches').textContent = stats.highRiskBatches;
-  document.getElementById('stat-unverified-batches').textContent = stats.unverifiedBatches;
-  document.getElementById('stat-total-waste-kg').textContent = formatKg(stats.totalWasteCollectedKg);
+  if (user.role === 'operator') {
+    // -------------------------------------------------------------
+    // PROCESSING CENTER OPERATOR DASHBOARD
+    // -------------------------------------------------------------
+    const adminView = document.getElementById('admin-dashboard-container');
+    const operatorView = document.getElementById('operator-dashboard-container');
+    if (adminView) adminView.style.display = 'none';
+    if (operatorView) operatorView.style.display = 'block';
+
+    renderOperatorDashboard(batches);
+  } else {
+    // -------------------------------------------------------------
+    // MUNICIPAL ADMIN DASHBOARD
+    // -------------------------------------------------------------
+    const adminView = document.getElementById('admin-dashboard-container');
+    const operatorView = document.getElementById('operator-dashboard-container');
+    if (adminView) adminView.style.display = 'block';
+    if (operatorView) operatorView.style.display = 'none';
+
+    renderAdminDashboard(batches, alerts);
+  }
+}
+
+// ============================================================================
+// 1. MUNICIPAL ADMIN DASHBOARD RENDERING
+// ============================================================================
+function renderAdminDashboard(batches, alerts) {
+  const stats = DataStore.getStatsSummary();
+
+  // Populate 6 Municipal Statistics Cards
+  setElText('stat-total-batches', stats.totalBatches);
+  setElText('stat-completed-batches', stats.completedBatches);
+  setElText('stat-intransit-batches', stats.inTransitBatches);
+  setElText('stat-highrisk-batches', stats.highRiskBatches);
+  setElText('stat-unverified-batches', stats.unverifiedBatches);
+  setElText('stat-total-waste-kg', formatKg(stats.totalWasteCollectedKg));
 
   // Render Charts
   renderCollectionChart(batches);
   renderDistributionChart(batches);
 
-  // Render Recent Batches Table
-  renderRecentBatches(batches.slice(0, 5));
+  // Render Recent Batches Table (5 items)
+  renderAdminRecentBatches(batches.slice(0, 5));
 
   // Render Recent AI Risk Alerts
   renderRecentAlerts(alerts.slice(0, 4));
 
-  // Render Integrity Score Overview Widget
-  renderIntegrityWidget(batches[0]); // default to first batch (WB-0001)
+  // Render Integrity Score Overview Widget (WB-0001)
+  if (batches.length > 0) {
+    renderIntegrityWidget(batches[0]);
+  }
 }
 
 function renderCollectionChart(batches) {
@@ -47,7 +82,7 @@ function renderCollectionChart(batches) {
     collectionChartInstance.destroy();
   }
 
-  // Simulated chronological daily aggregation (last 7 days)
+  // Simulated chronological daily intake vs processed recovery (last 7 days)
   const labels = ['29 Oct', '30 Oct', '31 Oct', '01 Nov', '02 Nov', '03 Nov', '04 Nov'];
   const collectedData = [2400, 3100, 2800, 3600, 4200, 3850, 4600];
   const processedData = [2250, 2980, 2710, 3450, 4010, 3620, 4310];
@@ -58,26 +93,30 @@ function renderCollectionChart(batches) {
       labels: labels,
       datasets: [
         {
-          label: 'Collected Waste (kg)',
+          label: 'Municipal Intake (kg)',
           data: collectedData,
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: '#278C78',
+          backgroundColor: 'rgba(39, 140, 120, 0.12)',
           fill: true,
           tension: 0.35,
           borderWidth: 2.5,
-          pointBackgroundColor: '#10b981',
+          pointBackgroundColor: '#278C78',
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 2,
           pointRadius: 4
         },
         {
-          label: 'Processed & Verified (kg)',
+          label: 'Certified Processed (kg)',
           data: processedData,
-          borderColor: '#0284c7',
-          backgroundColor: 'rgba(2, 132, 199, 0.05)',
+          borderColor: '#43BFA3',
+          backgroundColor: 'rgba(67, 191, 163, 0.05)',
           fill: true,
           tension: 0.35,
           borderWidth: 2,
           borderDash: [5, 5],
-          pointBackgroundColor: '#0284c7',
+          pointBackgroundColor: '#43BFA3',
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 2,
           pointRadius: 3
         }
       ]
@@ -90,10 +129,16 @@ function renderCollectionChart(batches) {
           position: 'top',
           labels: {
             boxWidth: 12,
-            font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 }
+            font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 },
+            color: '#263238'
           }
         },
         tooltip: {
+          backgroundColor: '#203A43',
+          titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 700 },
+          bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
+          padding: 10,
+          cornerRadius: 8,
           callbacks: {
             label: function(context) {
               return ` ${context.dataset.label}: ${context.parsed.y.toLocaleString()} kg`;
@@ -104,15 +149,16 @@ function renderCollectionChart(batches) {
       scales: {
         y: {
           beginAtZero: false,
-          grid: { color: 'rgba(0, 0, 0, 0.05)' },
+          grid: { color: 'rgba(226, 232, 240, 0.8)' },
           ticks: {
             font: { family: 'Plus Jakarta Sans', size: 11 },
+            color: '#718096',
             callback: value => value + ' kg'
           }
         },
         x: {
           grid: { display: false },
-          ticks: { font: { family: 'Plus Jakarta Sans', size: 11 } }
+          ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#718096' }
         }
       }
     }
@@ -127,7 +173,6 @@ function renderDistributionChart(batches) {
     distributionChartInstance.destroy();
   }
 
-  // Aggregate by waste type
   const typeCounts = {
     Organic: 0,
     Plastic: 0,
@@ -162,38 +207,29 @@ function renderDistributionChart(batches) {
             typeCounts.Mixed_Waste
           ],
           backgroundColor: [
-            '#10b981', // Organic
-            '#3b82f6', // Plastic
-            '#8b5cf6', // E-Waste
-            '#eab308', // Paper
-            '#64748b', // Metal
-            '#f43f5e'  // Mixed
+            '#278C78', // Organic (Emerald Teal)
+            '#0284C7', // Plastic (Blue)
+            '#7C3AED', // E-Waste (Purple)
+            '#D97706', // Paper (Amber)
+            '#475569', // Metal (Slate)
+            '#DC2626'  // Mixed (Red)
           ],
           borderWidth: 2,
-          borderColor: '#ffffff'
+          borderColor: '#FFFFFF'
         }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '70%',
+      cutout: '68%',
       plugins: {
         legend: {
           position: 'right',
           labels: {
             boxWidth: 12,
-            font: { family: 'Plus Jakarta Sans', size: 11, weight: 500 }
-          }
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-              const val = context.parsed;
-              const pct = ((val / total) * 100).toFixed(1);
-              return ` ${context.label}: ${val.toLocaleString()} kg (${pct}%)`;
-            }
+            font: { family: 'Plus Jakarta Sans', size: 11, weight: 600 },
+            color: '#263238'
           }
         }
       }
@@ -201,14 +237,9 @@ function renderDistributionChart(batches) {
   });
 }
 
-function renderRecentBatches(batches) {
+function renderAdminRecentBatches(batches) {
   const tbody = document.getElementById('recent-batches-tbody');
   if (!tbody) return;
-
-  if (batches.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4">No recent batches found</td></tr>`;
-    return;
-  }
 
   tbody.innerHTML = batches.map(b => {
     const riskBadgeClass = b.riskLevel === 'High' ? 'badge-high' : b.riskLevel === 'Medium' ? 'badge-medium' : 'badge-low';
@@ -218,7 +249,7 @@ function renderRecentBatches(batches) {
     return `
       <tr>
         <td>
-          <a href="batch-details.html?id=${b.id}" class="mono" style="font-weight: 700; color: var(--primary-700);">
+          <a href="batch-details.html?id=${b.id}" class="mono font-bold" style="color: var(--secondary);">
             ${b.id}
           </a>
         </td>
@@ -227,8 +258,11 @@ function renderRecentBatches(batches) {
             <i class="fa-solid fa-cube"></i> ${b.wasteType}
           </span>
         </td>
-        <td style="font-weight: 600;">${formatKg(b.collectedQuantityKg)}</td>
-        <td><i class="fa-solid fa-location-dot text-slate-400"></i> ${b.collectionLocation}</td>
+        <td style="font-weight: 700;">${formatKg(b.collectedQuantityKg)}</td>
+        <td>
+          <div style="font-size: 0.85rem; font-weight: 600;">${b.collectionLocation}</div>
+          <div style="font-size: 0.72rem; color: var(--text-secondary);">${b.collectionDate}</div>
+        </td>
         <td><span class="mono">${b.vehicleNumber}</span></td>
         <td>
           <span class="badge ${statusBadgeClass}">
@@ -255,55 +289,201 @@ function renderRecentAlerts(alerts) {
   if (!container) return;
 
   if (alerts.length === 0) {
-    container.innerHTML = `<div class="empty-state py-4"><p class="text-slate-400">No AI risk alerts at this time.</p></div>`;
+    container.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--text-secondary); font-size: 0.85rem;"><i class="fa-solid fa-shield-check text-success" style="font-size: 1.5rem; display: block; margin-bottom: 6px;"></i> No active AI anomalies</div>`;
     return;
   }
 
-  container.innerHTML = alerts.map(a => {
-    const iconClass = a.riskLevel === 'High' ? 'fa-triangle-exclamation text-danger' : 'fa-circle-exclamation text-warning';
-    const borderClass = a.riskLevel === 'High' ? 'border-danger' : 'border-warning';
-
-    return `
-      <div style="background: var(--slate-50); border-left: 4px solid ${a.riskLevel === 'High' ? 'var(--danger)' : 'var(--warning)'}; border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 12px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid ${iconClass}"></i>
-            <span style="font-weight: 700; font-size: 0.85rem; color: var(--slate-900);">${a.batchId} - ${a.issueType}</span>
-          </div>
-          <span class="badge ${a.riskLevel === 'High' ? 'badge-high' : 'badge-medium'}">${a.riskLevel} Risk</span>
-        </div>
-        <p style="font-size: 0.78rem; color: var(--slate-600); margin-bottom: 6px;">${a.aiExplanation}</p>
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.72rem; color: var(--slate-400);"><i class="fa-regular fa-clock"></i> ${a.date}</span>
-          <a href="ai-alerts.html" style="font-size: 0.75rem; font-weight: 600; color: var(--primary-600);">Investigate <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+  container.innerHTML = alerts.map(a => `
+    <div style="padding: 11px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px;">
+      <div style="width: 30px; height: 30px; min-width: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; background: ${a.riskLevel === 'High' ? 'var(--status-red-bg)' : 'var(--status-amber-bg)'}; color: ${a.riskLevel === 'High' ? 'var(--status-red)' : 'var(--status-amber)'};">
+        <i class="fa-solid ${a.riskLevel === 'High' ? 'fa-triangle-exclamation' : 'fa-bell'}"></i>
       </div>
-    `;
-  }).join('');
+      <div style="flex: 1; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <a href="batch-details.html?id=${a.batchId}" class="mono font-bold" style="font-size: 0.82rem; color: var(--secondary);">${a.batchId}</a>
+          <span class="badge ${a.riskLevel === 'High' ? 'badge-high' : 'badge-medium'}" style="font-size: 0.65rem; padding: 2px 6px;">${a.riskLevel}</span>
+        </div>
+        <div style="font-size: 0.76rem; font-weight: 600; color: var(--text-primary); margin-top: 1px;">${a.issueType}</div>
+        <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.35; margin-top: 2px;">${a.aiExplanation.substring(0, 80)}...</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function renderIntegrityWidget(batch) {
-  if (!batch) return;
   const integrity = DataStore.calculateIntegrityScore(batch);
   if (!integrity) return;
 
-  const scoreEl = document.getElementById('integrity-widget-score');
+  setElText('integrity-widget-batch-id', batch.id);
+  setElText('integrity-widget-score', integrity.totalScore);
+  
   const catEl = document.getElementById('integrity-widget-category');
-  const batchIdEl = document.getElementById('integrity-widget-batch-id');
-  const circleEl = document.getElementById('integrity-widget-circle');
-
-  if (scoreEl) scoreEl.textContent = integrity.totalScore;
   if (catEl) {
     catEl.textContent = integrity.category;
     catEl.className = `badge ${integrity.colorClass}`;
   }
-  if (batchIdEl) batchIdEl.textContent = batch.id;
 
-  if (circleEl) {
-    // Circle circumference = 2 * PI * r = 2 * 3.14159 * 70 = ~440
+  const circle = document.getElementById('integrity-widget-circle');
+  if (circle) {
     const circumference = 440;
     const offset = circumference - (integrity.totalScore / 100) * circumference;
-    circleEl.style.strokeDashoffset = offset;
-    circleEl.style.stroke = integrity.totalScore >= 70 ? 'var(--primary-500)' : integrity.totalScore >= 50 ? 'var(--warning)' : 'var(--danger)';
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = integrity.totalScore >= 70 ? 'var(--secondary)' : integrity.totalScore >= 50 ? 'var(--status-amber)' : 'var(--status-red)';
   }
+}
+
+// ============================================================================
+// 2. PROCESSING CENTER OPERATOR DASHBOARD RENDERING
+// ============================================================================
+function renderOperatorDashboard(batches) {
+  const opStats = DataStore.getOperatorStatsSummary('Pune Eco-Compost Facility');
+
+  // Populate 6 Operator-Specific Metric Cards
+  setElText('op-stat-total-registered', opStats.totalBatchesRegistered);
+  setElText('op-stat-my-batches', opStats.myAssignedBatches);
+  setElText('op-stat-in-transit', opStats.batchesInTransit);
+  setElText('op-stat-received', opStats.batchesReceived);
+  setElText('op-stat-pending-proc', opStats.pendingProcessing);
+  setElText('op-stat-completed-proc', opStats.completedProcessing);
+
+  // Render Facility Intake vs Processed Yield Chart
+  renderOperatorThroughputChart();
+
+  // Render Recent Facility Batches Table
+  renderOperatorRecentBatches(opStats.myBatches.length > 0 ? opStats.myBatches : batches.slice(0, 6));
+}
+
+function renderOperatorThroughputChart() {
+  const ctx = document.getElementById('operatorThroughputChart');
+  if (!ctx) return;
+
+  if (operatorChartInstance) {
+    operatorChartInstance.destroy();
+  }
+
+  // Daily intake and compost yield for Pune Eco-Compost Facility
+  const labels = ['29 Oct', '30 Oct', '31 Oct', '01 Nov', '02 Nov', '03 Nov', '04 Nov'];
+  const intakeData = [850, 1100, 950, 1250, 1400, 1150, 1300];
+  const yieldData  = [810, 1060, 915, 1195, 1340, 1100, 1260];
+
+  operatorChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Organic Intake at Gate (kg)',
+          data: intakeData,
+          backgroundColor: '#278C78',
+          borderRadius: 6
+        },
+        {
+          label: 'Certified Compost Yield (kg)',
+          data: yieldData,
+          backgroundColor: '#43BFA3',
+          borderRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 12,
+            font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 },
+            color: '#263238'
+          }
+        },
+        tooltip: {
+          backgroundColor: '#203A43',
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(context) {
+              return ` ${context.dataset.label}: ${context.parsed.y.toLocaleString()} kg`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(226, 232, 240, 0.8)' },
+          ticks: {
+            font: { family: 'Plus Jakarta Sans', size: 11 },
+            color: '#718096',
+            callback: value => value + ' kg'
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#718096' }
+        }
+      }
+    }
+  });
+}
+
+function renderOperatorRecentBatches(facilityBatches) {
+  const tbody = document.getElementById('op-recent-batches-tbody');
+  if (!tbody) return;
+
+  if (facilityBatches.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4">No consignments routed to this facility yet.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = facilityBatches.map(b => {
+    const riskBadgeClass = b.riskLevel === 'High' ? 'badge-high' : b.riskLevel === 'Medium' ? 'badge-medium' : 'badge-low';
+    const statusBadgeClass = b.status === 'Completed' ? 'badge-completed' : b.status === 'In-Transit' ? 'badge-in-transit' : 'badge-discrepancy';
+    const wasteClass = `waste-${b.wasteType.toLowerCase().replace(/[^a-z]/g, '')}`;
+    const receivedDisplay = b.receivedQuantityKg ? formatKg(b.receivedQuantityKg) : '<span style="color: var(--status-amber); font-weight: 600;">Pending Gate</span>';
+
+    return `
+      <tr>
+        <td>
+          <a href="batch-details.html?id=${b.id}" class="mono font-bold" style="color: var(--secondary);">
+            ${b.id}
+          </a>
+        </td>
+        <td>
+          <span class="waste-badge ${wasteClass}">
+            <i class="fa-solid fa-cube"></i> ${b.wasteType}
+          </span>
+        </td>
+        <td style="font-weight: 700;">${formatKg(b.collectedQuantityKg)}</td>
+        <td>${receivedDisplay}</td>
+        <td><span class="mono">${b.vehicleNumber}</span></td>
+        <td>
+          <span class="badge ${statusBadgeClass}">
+            <span class="badge-dot"></span>${b.status}
+          </span>
+        </td>
+        <td>
+          <span class="badge ${riskBadgeClass}">
+            <span class="badge-dot"></span>${b.riskLevel}
+          </span>
+        </td>
+        <td>
+          <div style="display: flex; gap: 6px;">
+            <a href="processing-records.html" class="btn btn-primary btn-sm" title="Log Weighbridge & Processing">
+              <i class="fa-solid fa-clipboard-check"></i> Process
+            </a>
+            <a href="batch-details.html?id=${b.id}" class="btn btn-secondary btn-sm" title="View Digital Passport">
+              <i class="fa-solid fa-passport"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Helper to safely set element text
+function setElText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
 }

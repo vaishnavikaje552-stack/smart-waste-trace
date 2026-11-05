@@ -93,15 +93,15 @@ function renderReportChart(batches) {
       labels: labels.map(l => l.replace(' Facility', '').replace(' Center', '')),
       datasets: [
         {
-          label: 'Collected Quantity (kg)',
+          label: 'Collected Intake (kg)',
           data: collectedValues,
-          backgroundColor: '#10b981',
+          backgroundColor: '#278C78',
           borderRadius: 6
         },
         {
-          label: 'Processed Quantity (kg)',
+          label: 'Processed Yield (kg)',
           data: processedValues,
-          backgroundColor: '#0284c7',
+          backgroundColor: '#43BFA3',
           borderRadius: 6
         }
       ]

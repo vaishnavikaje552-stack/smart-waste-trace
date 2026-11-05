@@ -96,8 +96,8 @@ function selectBatchForQR(batchId) {
         text: payload,
         width: 180,
         height: 180,
-        colorDark: '#062b1b',
-        colorLight: '#ffffff',
+        colorDark: '#203A43',
+        colorLight: '#FFFFFF',
         correctLevel: QRCode.CorrectLevel.H
       });
     }
@@ -118,10 +118,10 @@ function renderScannedPassportCard(batch) {
   const statusClass = batch.status === 'Completed' ? 'badge-completed' : batch.status === 'In-Transit' ? 'badge-in-transit' : 'badge-discrepancy';
 
   container.innerHTML = `
-    <div class="card" style="border: 2px solid var(--primary-700);">
-      <div class="card-header" style="background: var(--primary-50);">
+    <div class="card" style="border: 2px solid var(--deep-forest);">
+      <div class="card-header" style="background: var(--soft-mint);">
         <div>
-          <span class="mono" style="font-weight: 800; font-size: 1.15rem; color: var(--primary-900);">${batch.id}</span>
+          <span class="mono" style="font-weight: 800; font-size: 1.15rem; color: var(--deep-forest);">${batch.id}</span>
           <span style="font-size: 0.85rem; color: var(--slate-600); margin-left: 8px;">• ${batch.wasteType} Waste</span>
         </div>
         <div style="display: flex; gap: 8px;">

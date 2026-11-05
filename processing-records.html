@@ -31,12 +31,16 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1.8fr; gap: 24px;" class="dashboard-grid-main">
+        <!-- Top Section: Form on Left, Audit Guidelines on Right -->
+        <div class="dashboard-grid-unequal">
           <!-- Record Processing Form -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">
-                <i class="fa-solid fa-clipboard-check text-primary"></i> Add Facility Processing Record
+              <div>
+                <div class="card-title">
+                  <i class="fa-solid fa-clipboard-check text-primary"></i> Add Facility Processing Record
+                </div>
+                <div class="card-subtitle">Certified weighbridge signoff and mass-balance accounting</div>
               </div>
               <span class="badge badge-low">Plant Operator Mode</span>
             </div>
@@ -52,12 +56,12 @@
                 <div class="form-row">
                   <div class="form-group">
                     <label class="form-label">Collected Manifest Weight</label>
-                    <input type="text" id="pr-collected-display" class="form-control" readonly style="background: var(--slate-100); color: var(--slate-600);" value="—">
+                    <input type="text" id="pr-collected-display" class="form-control" readonly style="background: var(--background); color: var(--text-secondary);" value="—">
                   </div>
 
                   <div class="form-group">
                     <label class="form-label">Assigned Facility</label>
-                    <input type="text" id="pr-center-display" class="form-control" readonly style="background: var(--slate-100); color: var(--slate-600);" value="—">
+                    <input type="text" id="pr-center-display" class="form-control" readonly style="background: var(--background); color: var(--text-secondary);" value="—">
                   </div>
                 </div>
 
@@ -74,8 +78,8 @@
                 </div>
 
                 <!-- Real-time Discrepancy Preview Tag -->
-                <div style="margin-bottom: 16px;">
-                  <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--slate-500); margin-bottom: 4px;">Live Mass-Balance Variance</div>
+                <div style="margin-bottom: 16px; background: var(--background); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                  <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">Live Mass-Balance Variance</div>
                   <div id="pr-discrepancy-preview">
                     <span class="badge badge-neutral">Select a batch to evaluate variance</span>
                   </div>
@@ -106,18 +110,20 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label class="form-label" for="pr-date">Processing Date <span class="required">*</span></label>
-                  <input type="date" id="pr-date" class="form-control" required>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="pr-date">Processing Date <span class="required">*</span></label>
+                    <input type="date" id="pr-date" class="form-control" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="pr-notes">Operator Compliance Remarks</label>
+                    <input type="text" id="pr-notes" class="form-control" placeholder="e.g. Moisture reduction 3.2%; Grade A standard.">
+                  </div>
                 </div>
 
-                <div class="form-group">
-                  <label class="form-label" for="pr-notes">Operator Compliance Remarks</label>
-                  <textarea id="pr-notes" class="form-control" rows="2" placeholder="e.g. Moisture reduction measured at 3.2%; quality meets Grade A compost standard."></textarea>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 16px;">
-                  <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 6px;">
+                  <button type="submit" class="btn btn-primary" style="min-width: 220px;">
                     <i class="fa-solid fa-stamp"></i> Record &amp; Verify Processing
                   </button>
                 </div>
@@ -125,48 +131,71 @@
             </div>
           </div>
 
-          <!-- Processing Records History Table -->
-          <div>
-            <div class="card">
-              <div class="card-header">
-                <div>
-                  <div class="card-title">
-                    <i class="fa-solid fa-clock-rotate-left text-primary"></i> Processing Records Log
-                  </div>
-                  <div class="card-subtitle">Certified weighbridge signoffs and shrinkage tracking</div>
-                </div>
+          <!-- Right: Guidance & Mass-Balance Protocol -->
+          <div class="card" style="background: var(--surface);">
+            <div class="card-header" style="background: var(--primary); color: #ffffff;">
+              <div class="card-title" style="color: #ffffff;">
+                <i class="fa-solid fa-scale-balanced" style="color: var(--accent);"></i> Mass-Balance Audit Protocol
               </div>
-              <div class="table-responsive">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Batch ID</th>
-                      <th>Facility</th>
-                      <th>Received</th>
-                      <th>Processed</th>
-                      <th>Variance</th>
-                      <th>Method</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Signoff</th>
-                    </tr>
-                  </thead>
-                  <tbody id="processing-records-tbody">
-                    <!-- Populated by processing.js -->
-                  </tbody>
-                </table>
-              </div>
+              <span class="badge badge-low" style="background: rgba(39, 140, 120, 0.25); color: var(--accent); border-color: rgba(67, 191, 163, 0.4);">Tolerance 5.0%</span>
             </div>
+            <div class="card-body">
+              <div style="background: var(--soft-mint); border-left: 3px solid var(--secondary); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 0.83rem; color: var(--text-primary); line-height: 1.5;">
+                <strong style="color: var(--primary); display: block; margin-bottom: 4px;">
+                  <i class="fa-solid fa-triangle-exclamation" style="color: var(--status-amber);"></i> Municipal Discrepancy Tolerance Rule
+                </strong>
+                Any batch experiencing &gt;5% shrinkage or unaccounted mass divergence between collection intake and certified gate weighbridge is flagged automatically by the AI system as a potential diversion anomaly.
+              </div>
 
-            <!-- Guidance Note -->
-            <div class="card" style="margin-top: 20px; background: #fffbeb; border: 1px solid #fde68a;">
-              <div class="card-body" style="font-size: 0.82rem; color: #92400e;">
-                <div style="font-weight: 700; margin-bottom: 4px;">
-                  <i class="fa-solid fa-triangle-exclamation"></i> Municipal Discrepancy Tolerance Rule
-                </div>
-                Any batch experiencing &gt;5% shrinkage or unaccounted mass divergence is flagged by the simulated AI engine as a potential material divergence or illegal dumping anomaly.
+              <div style="font-size: 0.82rem; color: var(--text-primary); margin-bottom: 14px;">
+                <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                  <i class="fa-solid fa-circle-check text-primary"></i> Verification Criteria
+                </h4>
+                <ul style="padding-left: 18px; line-height: 1.6; color: var(--text-secondary);">
+                  <li>Certified weighbridge gross/tare measurement slips.</li>
+                  <li>Automated mass-balance shrinkage comparison.</li>
+                  <li>End-product yield registration (Compost, Pellets, RDF).</li>
+                  <li>Operator digital signature and license verification.</li>
+                </ul>
+              </div>
+
+              <div style="background: var(--background); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; font-size: 0.78rem; color: var(--text-secondary);">
+                <div><strong>Standard Allowable Moisture Loss:</strong> 3% - 5% (Organic)</div>
+                <div style="margin-top: 3px;"><strong>Non-biodegradable Tolerance:</strong> &lt;1.5% (Plastic, Metal, E-Waste)</div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section: Full-Width Processing Records Table -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Processing Records Log
+              </div>
+              <div class="card-subtitle">Certified weighbridge signoffs, throughput yields, and shrinkage tracking</div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Batch ID</th>
+                  <th>Facility</th>
+                  <th>Received</th>
+                  <th>Processed</th>
+                  <th>Variance</th>
+                  <th>Method</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Signoff</th>
+                </tr>
+              </thead>
+              <tbody id="processing-records-tbody">
+                <!-- Populated by processing.js -->
+              </tbody>
+            </table>
           </div>
         </div>
       </main>

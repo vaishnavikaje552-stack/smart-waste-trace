@@ -999,6 +999,37 @@ const DataStore = {
     };
   },
 
+  // Facility-Specific Statistics for Processing Center Operator
+  getOperatorStatsSummary(facilityName = 'Pune Eco-Compost Facility') {
+    const batches = this.getBatches();
+    const facilityLower = facilityName.toLowerCase();
+    
+    // Batches specifically designated for this facility
+    const myBatches = batches.filter(b => b.assignedCenter && b.assignedCenter.toLowerCase().includes('compost'));
+    
+    const totalBatchesRegistered = batches.length;
+    const myAssignedBatches = myBatches.length;
+    const batchesInTransit = myBatches.filter(b => b.status === 'In-Transit').length;
+    const batchesReceived = myBatches.filter(b => b.receivingConfirmed || b.receivedQuantityKg !== null).length;
+    const pendingProcessing = myBatches.filter(b => b.status !== 'Completed' && (b.receivingConfirmed || b.receivedQuantityKg !== null)).length;
+    const completedProcessing = myBatches.filter(b => b.status === 'Completed' || b.processingConfirmed).length;
+
+    const totalFacilityIntakeKg = myBatches.reduce((sum, b) => sum + (Number(b.collectedQuantityKg) || 0), 0);
+    const totalFacilityProcessedKg = myBatches.reduce((sum, b) => sum + (Number(b.processedQuantityKg) || 0), 0);
+
+    return {
+      totalBatchesRegistered,
+      myAssignedBatches,
+      batchesInTransit,
+      batchesReceived,
+      pendingProcessing,
+      completedProcessing,
+      totalFacilityIntakeKg,
+      totalFacilityProcessedKg,
+      myBatches
+    };
+  },
+
   // Reset to default demo data
   resetDemoData() {
     localStorage.setItem(STORAGE_KEYS.BATCHES, JSON.stringify(INITIAL_BATCHES));

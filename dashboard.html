@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Municipal Admin Dashboard | Smart Waste Trace</title>
+  <title>Dashboard | Smart Waste Trace</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -23,246 +24,534 @@
 
       <!-- Inner Content -->
       <main class="app-content">
-        <!-- Page Header & Actions -->
-        <div class="content-header">
-          <div>
-            <div class="content-header-title">Municipal Waste Operations Center</div>
-            <div class="content-header-subtitle">
-              Live monitoring of municipal waste streams, custodial transfers, and AI risk alerts.
-            </div>
-          </div>
-          <div class="content-header-actions">
-            <span class="simulated-pill"><i class="fa-solid fa-server"></i> Simulated Live Data</span>
-            <a href="create-batch.html" class="btn btn-primary">
-              <i class="fa-solid fa-plus-circle"></i> Create Batch
-            </a>
-            <a href="reports.html" class="btn btn-secondary">
-              <i class="fa-solid fa-file-export"></i> Export Report
-            </a>
-          </div>
-        </div>
 
-        <!-- 6 Core Municipal Metric Cards -->
-        <div class="stats-grid">
-          <div class="stat-card stat-primary">
-            <div>
-              <div class="stat-label">Total Batches</div>
-              <div class="stat-value" id="stat-total-batches">0</div>
-              <div class="stat-meta"><i class="fa-solid fa-layer-group text-primary"></i> Registry Total</div>
-            </div>
-            <div class="stat-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
-          </div>
-
-          <div class="stat-card stat-success">
-            <div>
-              <div class="stat-label">Completed Batches</div>
-              <div class="stat-value" id="stat-completed-batches">0</div>
-              <div class="stat-meta"><i class="fa-solid fa-circle-check text-success"></i> 100% Verified</div>
-            </div>
-            <div class="stat-icon"><i class="fa-solid fa-check-double"></i></div>
-          </div>
-
-          <div class="stat-card stat-warning">
-            <div>
-              <div class="stat-label">In-Transit Batches</div>
-              <div class="stat-value" id="stat-intransit-batches">0</div>
-              <div class="stat-meta"><i class="fa-solid fa-truck-moving text-warning"></i> En Route Facilities</div>
-            </div>
-            <div class="stat-icon"><i class="fa-solid fa-route"></i></div>
-          </div>
-
-          <div class="stat-card stat-danger">
-            <div>
-              <div class="stat-label">High-Risk Batches</div>
-              <div class="stat-value" id="stat-highrisk-batches">0</div>
-              <div class="stat-meta"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Discrepancy Flagged</div>
-            </div>
-            <div class="stat-icon"><i class="fa-solid fa-shield-virus"></i></div>
-          </div>
-
-          <div class="stat-card stat-purple">
-            <div>
-              <div class="stat-label">Unverified Batches</div>
-              <div class="stat-value" id="stat-unverified-batches">0</div>
-              <div class="stat-meta"><i class="fa-solid fa-hourglass-half" style="color: #8b5cf6;"></i> Pending Confirmation</div>
-            </div>
-            <div class="stat-icon"><i class="fa-solid fa-clipboard-question"></i></div>
-          </div>
-
-          <div class="stat-card stat-primary">
-            <div>
-              <div class="stat-label">Total Collected</div>
-              <div class="stat-value" id="stat-total-waste-kg" style="font-size: 1.45rem;">0 kg</div>
-              <div class="stat-meta"><i class="fa-solid fa-scale-balanced text-primary"></i> Gross Municipal Mass</div>
-            </div>
-            <div class="stat-icon"><i class="fa-solid fa-weight-hanging"></i></div>
-          </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="dashboard-grid-main">
-          <!-- Waste Collection Trend Chart -->
-          <div class="card">
-            <div class="card-header">
+        <!-- ==================================================================
+             1. MUNICIPAL ADMIN DASHBOARD VIEW
+             ================================================================== -->
+        <div id="admin-dashboard-container">
+          <!-- Welcome Admin Command Header -->
+          <div class="admin-welcome-banner">
+            <div class="admin-welcome-left">
+              <div class="admin-welcome-avatar">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
               <div>
-                <div class="card-title">
-                  <i class="fa-solid fa-chart-line text-primary"></i> Waste Collection &amp; Verification Trend
-                </div>
-                <div class="card-subtitle">Daily intake vs certified processed weight across municipal wards</div>
-              </div>
-              <span class="badge badge-low"><i class="fa-regular fa-calendar-check"></i> Last 7 Days</span>
-            </div>
-            <div class="card-body">
-              <div class="chart-container">
-                <canvas id="collectionOverviewChart"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <!-- Waste Distribution by Type -->
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">
-                  <i class="fa-solid fa-chart-pie text-primary"></i> Waste Type Distribution
-                </div>
-                <div class="card-subtitle">Composition breakdown by category</div>
-              </div>
-              <a href="reports.html" style="font-size: 0.78rem;">Full Report</a>
-            </div>
-            <div class="card-body">
-              <div class="chart-container">
-                <canvas id="wasteDistributionChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Triple Grid: Integrity Widget, AI Alerts Preview, Quick Actions -->
-        <div class="dashboard-grid-triple">
-          <!-- Waste Journey Integrity Overview -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fa-solid fa-gauge-high text-primary"></i> Journey Integrity Index
-              </div>
-              <span id="integrity-widget-category" class="badge badge-completed">Exceptional</span>
-            </div>
-            <div class="card-body text-center">
-              <div class="integrity-dial-wrapper">
-                <svg class="integrity-dial-svg" viewBox="0 0 160 160">
-                  <circle class="integrity-dial-bg" cx="80" cy="80" r="70" />
-                  <circle class="integrity-dial-progress" id="integrity-widget-circle" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="44" />
-                </svg>
-                <div class="integrity-dial-center">
-                  <div class="integrity-dial-number" id="integrity-widget-score">90</div>
-                  <div class="integrity-dial-label">Score / 100</div>
+                <div class="admin-welcome-title">Welcome back, Dr. Rajesh Kulkarni</div>
+                <div class="admin-welcome-sub">
+                  Municipal Solid Waste Monitoring &amp; Verification Command • Jurisdiction: Pune Municipal Corporation (PMC)
                 </div>
               </div>
-              <p style="font-size: 0.82rem; color: var(--slate-600); margin-bottom: 12px;">
-                Demonstrating benchmark batch: <strong id="integrity-widget-batch-id">WB-0001</strong>. Calculated via Quantity, Route Geofencing &amp; Custody telemetry.
-              </p>
-              <a href="integrity-score.html" class="btn btn-secondary btn-sm" style="width: 100%;">
-                <i class="fa-solid fa-calculator"></i> Full Integrity Calculator
+            </div>
+            <div class="admin-welcome-right">
+              <span class="badge badge-low" style="background: rgba(234, 244, 241, 0.2); color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3);">
+                <span class="badge-dot" style="background: var(--accent);"></span> All 6 Facilities Online
+              </span>
+              <a href="qr-tracking.html" class="btn btn-secondary btn-sm" style="background: rgba(255, 255, 255, 0.15); color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3);">
+                <i class="fa-solid fa-qrcode"></i> Verify QR Passport
+              </a>
+              <a href="reports.html" class="btn btn-primary btn-sm" style="background: var(--secondary); border-color: var(--secondary);">
+                <i class="fa-solid fa-file-invoice"></i> Compliance Report
               </a>
             </div>
           </div>
 
-          <!-- Recent AI Risk Alerts -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fa-solid fa-shield-virus text-danger"></i> Recent AI Risk Alerts
+          <!-- Content Header / Subtitle -->
+          <div class="content-header" style="margin-bottom: 20px;">
+            <div>
+              <div class="content-header-title">Municipal Executive Oversight Dashboard</div>
+              <div class="content-header-subtitle">
+                Live automated telemetry across waste streams, transfer corridors, plant weighbridges, and AI anomaly alerts.
               </div>
-              <a href="ai-alerts.html" class="btn btn-ghost btn-sm" style="font-size: 0.78rem;">View All</a>
             </div>
-            <div class="card-body" style="padding-top: 14px;">
-              <div id="recent-alerts-list"></div>
+            <div class="content-header-actions">
+              <span class="simulated-pill"><i class="fa-solid fa-satellite-dish"></i> Live Simulated Telemetry</span>
             </div>
           </div>
 
-          <!-- Quick Action Shortcuts -->
+          <!-- 6 Core Municipal Metric Cards -->
+          <div class="stats-grid">
+            <div class="stat-card stat-primary">
+              <div>
+                <div class="stat-label">Total Registered Batches</div>
+                <div class="stat-value" id="stat-total-batches">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-arrow-trend-up text-primary"></i> +12% active this week</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+            </div>
+
+            <div class="stat-card stat-success">
+              <div>
+                <div class="stat-label">Completed &amp; Verified</div>
+                <div class="stat-value" id="stat-completed-batches">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-circle-check text-success"></i> 100% Custody Signoff</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-check-double"></i></div>
+            </div>
+
+            <div class="stat-card stat-blue">
+              <div>
+                <div class="stat-label">Active In-Transit Fleet</div>
+                <div class="stat-value" id="stat-intransit-batches">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-location-arrow text-primary"></i> Live Corridor Geofencing</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-truck-moving"></i></div>
+            </div>
+
+            <div class="stat-card stat-danger">
+              <div>
+                <div class="stat-label">High-Risk Anomalies</div>
+                <div class="stat-value" id="stat-highrisk-batches">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Immediate Review Required</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-shield-virus"></i></div>
+            </div>
+
+            <div class="stat-card stat-warning">
+              <div>
+                <div class="stat-label">Pending Gate Verification</div>
+                <div class="stat-value" id="stat-unverified-batches">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-hourglass-half text-warning"></i> Awaiting Facility Intake</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-clipboard-question"></i></div>
+            </div>
+
+            <div class="stat-card stat-primary">
+              <div>
+                <div class="stat-label">Total Municipal Mass</div>
+                <div class="stat-value" id="stat-total-waste-kg" style="font-size: 1.5rem;">0 kg</div>
+                <div class="stat-meta"><i class="fa-solid fa-scale-balanced text-primary"></i> Certified Gross Intake</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-weight-hanging"></i></div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="dashboard-grid-main">
+            <!-- Waste Collection & Verification Trend Chart -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">
+                    <i class="fa-solid fa-chart-line text-primary"></i> Municipal Waste Intake vs. Verified Recovery
+                  </div>
+                  <div class="card-subtitle">Daily collection mass vs certified processed yield across municipal wards</div>
+                </div>
+                <span class="badge badge-low"><i class="fa-regular fa-calendar-check"></i> Last 7 Days</span>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="collectionOverviewChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Waste Distribution by Type -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">
+                    <i class="fa-solid fa-chart-pie text-primary"></i> Waste Stream Composition
+                  </div>
+                  <div class="card-subtitle">Category mass proportion breakdown</div>
+                </div>
+                <a href="reports.html" style="font-size: 0.78rem; font-weight: 700; color: var(--secondary);">Full Report</a>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="wasteDistributionChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Triple Grid: Integrity Widget, AI Alerts Preview, Admin Supervision Actions -->
+          <div class="dashboard-grid-triple">
+            <!-- Waste Journey Integrity Overview -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-gauge-high text-primary"></i> Journey Integrity Index
+                </div>
+                <span id="integrity-widget-category" class="badge badge-completed">Exceptional</span>
+              </div>
+              <div class="card-body text-center">
+                <div class="integrity-dial-wrapper">
+                  <svg class="integrity-dial-svg" viewBox="0 0 160 160">
+                    <circle class="integrity-dial-bg" cx="80" cy="80" r="70" />
+                    <circle class="integrity-dial-progress" id="integrity-widget-circle" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="44" />
+                  </svg>
+                  <div class="integrity-dial-center">
+                    <div class="integrity-dial-number" id="integrity-widget-score">90</div>
+                    <div class="integrity-dial-label">Score / 100</div>
+                  </div>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">
+                  Demonstrating benchmark consignment <strong id="integrity-widget-batch-id">WB-0001</strong> evaluated via 4-pillar algorithmic audit.
+                </p>
+                <a href="integrity-score.html" class="btn btn-secondary btn-sm" style="width: 100%;">
+                  <i class="fa-solid fa-calculator"></i> Full Integrity Calculator
+                </a>
+              </div>
+            </div>
+
+            <!-- Recent AI Risk Alerts -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-shield-virus text-danger"></i> AI Journey Risk Alerts
+                </div>
+                <a href="ai-alerts.html" class="btn btn-ghost btn-sm" style="font-size: 0.78rem; font-weight: 700;">View All</a>
+              </div>
+              <div class="card-body" style="padding-top: 14px;">
+                <div id="recent-alerts-list">
+                  <!-- Dynamically populated by dashboard.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Municipal Supervision Quick Actions (Admin Oversight Only) -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-shield-halved text-primary"></i> Municipal Supervisory Actions
+                </div>
+                <span class="badge badge-neutral">Admin Oversight</span>
+              </div>
+              <div class="card-body">
+                <div class="quick-actions-grid">
+                  <a href="qr-tracking.html" class="action-tile">
+                    <div class="action-tile-icon"><i class="fa-solid fa-qrcode"></i></div>
+                    <div>
+                      <div class="action-tile-title">Verify QR Passport</div>
+                      <div class="action-tile-desc">Inspect batch digital passport at checkpoints</div>
+                    </div>
+                  </a>
+
+                  <a href="transportation.html" class="action-tile">
+                    <div class="action-tile-icon"><i class="fa-solid fa-route"></i></div>
+                    <div>
+                      <div class="action-tile-title">Track Fleet Corridor</div>
+                      <div class="action-tile-desc">Monitor live transit geofence checkpoints</div>
+                    </div>
+                  </a>
+
+                  <a href="processing-records.html" class="action-tile">
+                    <div class="action-tile-icon"><i class="fa-solid fa-scale-unbalanced"></i></div>
+                    <div>
+                      <div class="action-tile-title">Review Discrepancies</div>
+                      <div class="action-tile-desc">Audit mass-balance variance across facilities</div>
+                    </div>
+                  </a>
+
+                  <a href="ai-alerts.html" class="action-tile">
+                    <div class="action-tile-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div>
+                      <div class="action-tile-title">Audit AI Flags</div>
+                      <div class="action-tile-desc">Triage route deviations &amp; missing handshakes</div>
+                    </div>
+                  </a>
+                </div>
+
+                <div style="margin-top: 16px; background: var(--soft-mint); border: 1px dashed var(--status-green-border); padding: 10px 14px; border-radius: var(--radius-md); font-size: 0.78rem; color: var(--primary);">
+                  <i class="fa-solid fa-circle-check text-success"></i> <strong>Admin Mandate:</strong> Municipal Admins supervise registered batches, track live custody, and audit facility yields.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Waste Batches Oversight Table -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">
-                <i class="fa-solid fa-bolt text-warning"></i> Operational Quick Actions
+              <div>
+                <div class="card-title">
+                  <i class="fa-solid fa-clock-rotate-left text-primary"></i> Recent Waste Batches Manifest
+                </div>
+                <div class="card-subtitle">Real-time municipal consignment registry &amp; status tracking</div>
               </div>
+              <a href="batches.html" class="btn btn-secondary btn-sm">
+                <i class="fa-solid fa-table-list"></i> Full Oversight Registry
+              </a>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Batch ID</th>
+                    <th>Waste Type</th>
+                    <th>Quantity</th>
+                    <th>Collection Location</th>
+                    <th>Vehicle</th>
+                    <th>Status</th>
+                    <th>Risk Level</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-batches-tbody">
+                  <!-- Dynamically Populated by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================================================================
+             2. PROCESSING CENTER OPERATOR DASHBOARD VIEW
+             ================================================================== -->
+        <div id="operator-dashboard-container" style="display: none;">
+          <!-- Welcome Operator Command Header -->
+          <div class="admin-welcome-banner" style="background: linear-gradient(135deg, #132228 0%, var(--primary) 50%, var(--secondary) 100%);">
+            <div class="admin-welcome-left">
+              <div class="admin-welcome-avatar" style="background: var(--secondary); border-color: var(--accent);">
+                <i class="fa-solid fa-industry"></i>
+              </div>
+              <div>
+                <div class="admin-welcome-title">Welcome back, Sunil Deshmukh</div>
+                <div class="admin-welcome-sub">
+                  Plant Operations Lead • Assigned Facility: <strong style="color: #FFFFFF;">Pune Eco-Compost Facility (Hadapsar)</strong>
+                </div>
+              </div>
+            </div>
+            <div class="admin-welcome-right">
+              <span class="badge badge-low" style="background: rgba(39, 140, 120, 0.25); color: #FFFFFF; border-color: rgba(67, 191, 163, 0.4);">
+                <span class="badge-dot" style="background: var(--accent);"></span> Plant Weighbridge Active
+              </span>
+              <a href="create-batch.html" class="btn btn-primary btn-sm" style="background: var(--accent); border-color: var(--accent); color: var(--primary); font-weight: 700;">
+                <i class="fa-solid fa-plus-circle"></i> Create New Batch
+              </a>
+              <a href="qr-tracking.html" class="btn btn-secondary btn-sm" style="background: rgba(255, 255, 255, 0.15); color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3);">
+                <i class="fa-solid fa-qrcode"></i> Scan Inbound Gate QR
+              </a>
+            </div>
+          </div>
+
+          <!-- Content Header / Subtitle -->
+          <div class="content-header" style="margin-bottom: 20px;">
+            <div>
+              <div class="content-header-title">Processing Facility Operations Command</div>
+              <div class="content-header-subtitle">
+                Manage incoming waste consignments, record weighbridge gate receipts, track plant yields, and issue new collection intakes.
+              </div>
+            </div>
+            <div class="content-header-actions">
+              <a href="create-batch.html" class="btn btn-primary">
+                <i class="fa-solid fa-truck-ramp-box"></i> Register New Batch
+              </a>
+            </div>
+          </div>
+
+          <!-- 6 Operator-Specific Metric Cards -->
+          <div class="stats-grid">
+            <div class="stat-card stat-primary">
+              <div>
+                <div class="stat-label">Total Batches Registered</div>
+                <div class="stat-value" id="op-stat-total-registered">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-database text-primary"></i> System Database</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+            </div>
+
+            <div class="stat-card stat-success">
+              <div>
+                <div class="stat-label">My Assigned Batches</div>
+                <div class="stat-value" id="op-stat-my-batches">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-industry text-success"></i> Pune Eco-Compost</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-warehouse"></i></div>
+            </div>
+
+            <div class="stat-card stat-blue">
+              <div>
+                <div class="stat-label">Batches In Transit</div>
+                <div class="stat-value" id="op-stat-in-transit">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-truck-moving text-primary"></i> Heading to Plant</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-route"></i></div>
+            </div>
+
+            <div class="stat-card stat-warning">
+              <div>
+                <div class="stat-label">Batches Received</div>
+                <div class="stat-value" id="op-stat-received">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-scale-balanced text-warning"></i> Gate Verified</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-check-to-slot"></i></div>
+            </div>
+
+            <div class="stat-card stat-purple">
+              <div>
+                <div class="stat-label">Pending Processing</div>
+                <div class="stat-value" id="op-stat-pending-proc">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-clock text-warning"></i> In Facility Queue</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-hourglass-start"></i></div>
+            </div>
+
+            <div class="stat-card stat-success">
+              <div>
+                <div class="stat-label">Completed Processing</div>
+                <div class="stat-value" id="op-stat-completed-proc">0</div>
+                <div class="stat-meta"><i class="fa-solid fa-circle-check text-success"></i> Yield Certified</div>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+            </div>
+          </div>
+
+          <!-- Operator Quick Actions Grid -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-bolt text-primary"></i> Operator Quick Action Center
+              </div>
+              <span class="badge badge-low">Operational Workflows</span>
             </div>
             <div class="card-body">
-              <div class="quick-actions-grid">
-                <a href="create-batch.html" class="action-tile">
-                  <div class="action-tile-icon"><i class="fa-solid fa-plus"></i></div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                <a href="create-batch.html" class="action-tile" style="border-left: 4px solid var(--secondary); background: #FFFFFF;">
+                  <div class="action-tile-icon" style="background: var(--soft-mint); color: var(--secondary);">
+                    <i class="fa-solid fa-plus-circle"></i>
+                  </div>
                   <div>
-                    <div class="action-tile-title">Create Batch</div>
-                    <div class="action-tile-desc">Register new collection pickup with unique ID</div>
+                    <div class="action-tile-title" style="font-size: 0.95rem; color: var(--secondary);">1. Create New Batch</div>
+                    <div class="action-tile-desc">Register field pickup collection &amp; generate digital QR passport</div>
                   </div>
                 </a>
 
-                <a href="qr-tracking.html" class="action-tile">
-                  <div class="action-tile-icon"><i class="fa-solid fa-qrcode"></i></div>
+                <a href="transportation.html" class="action-tile" style="border-left: 4px solid var(--status-blue); background: #FFFFFF;">
+                  <div class="action-tile-icon" style="background: var(--status-blue-bg); color: var(--status-blue);">
+                    <i class="fa-solid fa-truck-fast"></i>
+                  </div>
                   <div>
-                    <div class="action-tile-title">Scan QR Code</div>
-                    <div class="action-tile-desc">Verify batch passport at receiving gates</div>
+                    <div class="action-tile-title" style="font-size: 0.95rem;">2. Record Transportation Update</div>
+                    <div class="action-tile-desc">Log vehicle checkpoint arrival, destination departure &amp; transit notes</div>
                   </div>
                 </a>
 
-                <a href="transportation.html" class="action-tile">
-                  <div class="action-tile-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                <a href="processing-records.html" class="action-tile" style="border-left: 4px solid var(--status-green); background: #FFFFFF;">
+                  <div class="action-tile-icon" style="background: var(--status-green-bg); color: var(--status-green);">
+                    <i class="fa-solid fa-scale-unbalanced"></i>
+                  </div>
                   <div>
-                    <div class="action-tile-title">Log Transit</div>
-                    <div class="action-tile-desc">Record route checkpoints and status</div>
+                    <div class="action-tile-title" style="font-size: 0.95rem;">3. Add Processing Record</div>
+                    <div class="action-tile-desc">Record weighbridge gate weight &amp; certified recovery product yield</div>
                   </div>
                 </a>
 
-                <a href="processing-records.html" class="action-tile">
-                  <div class="action-tile-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                <a href="qr-tracking.html" class="action-tile" style="border-left: 4px solid var(--primary); background: #FFFFFF;">
+                  <div class="action-tile-icon" style="background: var(--background); color: var(--primary);">
+                    <i class="fa-solid fa-qrcode"></i>
+                  </div>
                   <div>
-                    <div class="action-tile-title">Add Processing</div>
-                    <div class="action-tile-desc">Log facility weighments and yield</div>
+                    <div class="action-tile-title" style="font-size: 0.95rem;">4. Verify Inbound QR Passport</div>
+                    <div class="action-tile-desc">Scan arrival truck QR passport to initiate facility gate intake</div>
                   </div>
                 </a>
               </div>
+            </div>
+          </div>
 
-              <div style="margin-top: 14px; background: var(--primary-50); border: 1px dashed var(--primary-200); padding: 10px 14px; border-radius: var(--radius-md); font-size: 0.78rem; color: var(--primary-900);">
-                <i class="fa-solid fa-info-circle"></i> <strong>Simulation Engine:</strong> All creations and status changes are dynamically saved in browser localStorage.
+          <!-- Operator Facility Section: Throughput Chart & Mass-Balance Status -->
+          <div class="dashboard-grid-main">
+            <!-- Facility Intake vs Processed Yield Chart -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">
+                    <i class="fa-solid fa-chart-column text-primary"></i> Facility Throughput &amp; Recovery Yield
+                  </div>
+                  <div class="card-subtitle">Intake gross mass vs certified compost product yield (Pune Eco-Compost)</div>
+                </div>
+                <span class="badge badge-low"><i class="fa-solid fa-seedling"></i> Organic Compost Hub</span>
               </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="operatorThroughputChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plant Mass-Balance & Discrepancy Status Card -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-scale-balanced text-primary"></i> Plant Mass-Balance &amp; Integrity Status
+                </div>
+                <span class="badge badge-completed">97.9% Integrity</span>
+              </div>
+              <div class="card-body">
+                <div style="background: var(--soft-mint); border: 1px solid var(--status-green-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary);">Active Plant Mass Variance:</span>
+                    <span class="badge badge-completed">2.1% (Compliant)</span>
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45;">
+                    Current aggregate plant shrinkage is within the municipal &lt;5.0% threshold. Zero unverified material loss detected.
+                  </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.83rem;">
+                  <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: var(--background); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <span><strong>Active Composting Lines:</strong></span>
+                    <span style="color: var(--secondary); font-weight: 700;">2 Lines Operational</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: var(--background); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <span><strong>Daily Licensed Capacity:</strong></span>
+                    <span>5,000 kg / day</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: var(--background); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <span><strong>Current Day Weighbridge Total:</strong></span>
+                    <span style="font-weight: 700; color: var(--text-primary);" id="op-weighbridge-total">3,900 kg</span>
+                  </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                  <a href="processing-records.html" class="btn btn-secondary btn-sm" style="width: 100%;">
+                    <i class="fa-solid fa-file-signature"></i> Open Processing Ledger
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Facility Batch Activities Table -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">
+                  <i class="fa-solid fa-clock-rotate-left text-primary"></i> Facility Batch Queue &amp; Consignments
+                </div>
+                <div class="card-subtitle">Recent consignments routed to Pune Eco-Compost Facility</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="create-batch.html" class="btn btn-primary btn-sm">
+                  <i class="fa-solid fa-plus-circle"></i> Create Batch
+                </a>
+                <a href="batches.html" class="btn btn-secondary btn-sm">
+                  <i class="fa-solid fa-table-list"></i> View All My Batches
+                </a>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Batch ID</th>
+                    <th>Waste Type</th>
+                    <th>Collected (kg)</th>
+                    <th>Received (kg)</th>
+                    <th>Vehicle</th>
+                    <th>Status</th>
+                    <th>Risk Level</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="op-recent-batches-tbody">
+                  <!-- Dynamically Populated by dashboard.js for Operator -->
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- Recent Waste Batches Table -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">
-                <i class="fa-solid fa-clock-rotate-left text-primary"></i> Recent Waste Batches
-              </div>
-              <div class="card-subtitle">Real-time municipal collection manifest</div>
-            </div>
-            <a href="batches.html" class="btn btn-secondary btn-sm">
-              <i class="fa-solid fa-table-list"></i> View All Batches
-            </a>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Batch ID</th>
-                  <th>Waste Type</th>
-                  <th>Quantity</th>
-                  <th>Collection Location</th>
-                  <th>Vehicle</th>
-                  <th>Status</th>
-                  <th>Risk Level</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="recent-batches-tbody">
-                <!-- Dynamically Populated by dashboard.js -->
-              </tbody>
-            </table>
-          </div>
-        </div>
       </main>
     </div>
   </div>

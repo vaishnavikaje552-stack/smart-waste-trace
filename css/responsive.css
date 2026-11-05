@@ -1,5 +1,9 @@
 /* ==========================================================================
-   SMART WASTE TRACE - RESPONSIVE & PRINT ADAPTATIONS
+   SMART WASTE TRACE - RESPONSIVE DESIGN SYSTEM
+   Breakpoints:
+   - 1024px: Tablet Landscape & Medium Desktops
+   - 768px:  Tablet Portrait & Mobile Drawer
+   - 480px:  Mobile Phones (Portrait)
    ========================================================================== */
 
 /* Mobile Sidebar Drawer Overlay */
@@ -10,91 +14,97 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(32, 58, 67, 0.65);
   backdrop-filter: blur(4px);
-  z-index: 99;
+  z-index: 999;
   opacity: 0;
   transition: opacity var(--transition-normal);
+  pointer-events: none;
 }
 
 .sidebar-overlay.active {
   display: block;
   opacity: 1;
+  pointer-events: auto;
 }
 
-/* Tablet & Smaller Desktops (Max 1200px) */
-@media (max-width: 1200px) {
-  .dashboard-grid-main {
-    grid-template-columns: 1fr;
-  }
-  .dashboard-grid-triple {
-    grid-template-columns: 1fr;
-  }
+/* ==========================================================================
+   1. TABLET BREAKPOINT (Max 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .dashboard-grid-main,
+  .dashboard-grid-unequal,
   .passport-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-grid-triple {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .topbar-search {
+    width: 220px;
+  }
+
+  .app-content {
+    padding: 20px 22px;
   }
 }
 
-/* Tablet Portrait (Max 992px) */
-@media (max-width: 992px) {
-  :root {
-    --sidebar-width: 260px;
+/* ==========================================================================
+   2. MOBILE / TABLET PORTRAIT (Max 768px)
+   Sidebar transforms into off-canvas navigation drawer with hamburger button
+   ========================================================================== */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
   }
 
+  /* Off-Canvas Navigation Drawer */
   .app-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 260px !important;
     transform: translateX(-100%);
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
+    box-shadow: 6px 0 24px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
   }
 
   body.mobile-sidebar-open .app-sidebar {
     transform: translateX(0);
   }
 
+  /* Main Content Occupies Full Width */
   .app-main {
     margin-left: 0 !important;
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  body.sidebar-collapsed .app-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .app-topbar {
+    padding: 0 16px;
   }
 
   .topbar-search {
     display: none;
   }
 
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .app-content {
-    padding: 20px 16px;
+    padding: 16px 14px;
   }
 
-  .app-topbar {
-    padding: 0 16px;
-  }
-}
-
-/* Mobile Devices (Max 768px) */
-@media (max-width: 768px) {
-  html {
-    font-size: 14px;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .passport-field-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .passport-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .passport-body {
-    padding: 20px 16px;
-  }
-
+  /* Content Header Stacking */
   .content-header {
     flex-direction: column;
     align-items: flex-start;
@@ -107,18 +117,81 @@
     flex-wrap: wrap;
   }
 
+  /* Admin Welcome Banner Stacking */
+  .admin-welcome-banner {
+    padding: 16px 18px;
+  }
+
+  .admin-welcome-left {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .admin-welcome-right {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+
+  /* Cards & Grids to 1 Column */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  #processing-centers-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-grid-main,
+  .dashboard-grid-unequal,
+  .dashboard-grid-triple,
+  .passport-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  /* Form Rows Collapse to 1 Column */
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  /* Filter Bar Stacking */
   .filter-bar {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
+    padding: 14px;
   }
 
   .filter-group {
     width: 100%;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .filter-group .form-control,
-  .filter-group .form-select {
-    width: 100%;
+  .filter-group .form-select,
+  .filter-group select,
+  .filter-group input {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .passport-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .passport-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 20px;
+  }
+
+  .passport-body {
+    padding: 18px 16px;
   }
 
   .role-switcher-pill span {
@@ -131,9 +204,9 @@
   }
 
   #toast-container {
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
   }
 
   .toast {
@@ -146,25 +219,66 @@
   }
 }
 
-/* Print Stylesheet (For Passport & Reports) */
+/* ==========================================================================
+   3. SMALL MOBILE PHONES (Max 480px)
+   ========================================================================== */
+@media (max-width: 480px) {
+  html {
+    font-size: 13.5px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-card {
+    padding: 14px;
+  }
+
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding: 14px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+  }
+
+  .content-header-title {
+    font-size: 1.25rem;
+  }
+
+  .timeline-details {
+    grid-template-columns: 1fr;
+  }
+
+  .table-responsive {
+    border-radius: var(--radius-md);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+  }
+}
+
+/* Print Adaptations */
 @media print {
   .app-sidebar,
   .app-topbar,
+  .sidebar-overlay,
   .content-header-actions,
   .filter-bar,
-  .btn,
-  .sidebar-overlay,
   #toast-container {
     display: none !important;
   }
 
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-
   .app-main {
     margin-left: 0 !important;
+    width: 100% !important;
+    background: #FFFFFF !important;
   }
 
   .app-content {
@@ -173,21 +287,6 @@
 
   .passport-container {
     box-shadow: none !important;
-    border: 2px solid #000 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    page-break-inside: avoid;
-  }
-
-  .passport-header {
-    background: #062b1b !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .card {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-    page-break-inside: avoid;
+    border: 1px solid #000000 !important;
   }
 }

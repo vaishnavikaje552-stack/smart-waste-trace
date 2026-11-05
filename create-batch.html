@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Waste Batch | Smart Waste Trace</title>
+  <title>Field Collection Gateway | Smart Waste Trace</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dashboard.css">
@@ -20,38 +20,46 @@
       <div id="app-topbar-container"></div>
 
       <main class="app-content">
+        <!-- Role Notice Banner -->
+        <div class="simulated-banner" style="margin-bottom: 22px; background: rgba(37, 161, 142, 0.1); border: 1px solid var(--secondary); color: var(--deep-forest);">
+          <i class="fa-solid fa-industry" style="font-size: 1.1rem; color: var(--emerald);"></i>
+          <div>
+            <strong>Processing Center Consignment Intake:</strong> Register new waste consignments, record intake metrics, and mint verifiable digital QR passports for your facility. (Municipal Admins are restricted from creating batches and operate in supervisory audit mode).
+          </div>
+        </div>
+
         <!-- Header -->
         <div class="content-header">
           <div>
-            <div class="content-header-title">Initiate New Waste Batch</div>
+            <div class="content-header-title">Register New Waste Batch Intake</div>
             <div class="content-header-subtitle">
-              Issue an immutable municipal tracking record and generate a Waste Digital Passport.
+              Issue an immutable municipal tracking record and generate a digital QR passport upon consignment arrival.
             </div>
           </div>
           <div class="content-header-actions">
             <a href="batches.html" class="btn btn-secondary">
-              <i class="fa-solid fa-arrow-left"></i> Batch Registry
+              <i class="fa-solid fa-arrow-left"></i> Return to Registry
             </a>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;" class="dashboard-grid-main">
+        <div class="dashboard-grid-unequal">
           <!-- Form Card -->
           <div class="card">
             <div class="card-header">
               <div class="card-title">
-                <i class="fa-solid fa-circle-plus text-primary"></i> Batch Genesis Registration Form
+                <i class="fa-solid fa-truck-ramp-box text-primary"></i> Field Collection Pickup Manifest
               </div>
-              <span class="badge badge-low"><i class="fa-solid fa-check"></i> Standard Verification Flow</span>
+              <span class="badge badge-low"><i class="fa-solid fa-check"></i> Standard Intake Protocol</span>
             </div>
             <div class="card-body">
               <form id="create-batch-form">
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label" for="cb-waste-type">Waste Type <span class="required">*</span></label>
+                    <label class="form-label" for="cb-waste-type">Waste Category <span class="required">*</span></label>
                     <select id="cb-waste-type" class="form-select" required>
                       <option value="">-- Choose Waste Category --</option>
-                      <option value="Organic">Organic (Biodegradable &amp; Food)</option>
+                      <option value="Organic">Organic (Biodegradable &amp; Food Waste)</option>
                       <option value="Plastic">Plastic (PET, HDPE, Mixed Polymers)</option>
                       <option value="Paper">Paper &amp; Cardboard</option>
                       <option value="Metal">Metal &amp; Scrap Alloy</option>
@@ -61,53 +69,53 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label" for="cb-quantity">Collected Quantity (kg) <span class="required">*</span></label>
+                    <label class="form-label" for="cb-quantity">Gross Collected Weight (kg) <span class="required">*</span></label>
                     <input type="number" id="cb-quantity" class="form-control" placeholder="e.g. 750" min="1" step="0.5" required>
-                    <div class="form-hint">Enter certified gross weighbridge mass.</div>
+                    <div class="form-hint">Enter certified scale reading from pickup point.</div>
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label" for="cb-location">Collection Location <span class="required">*</span></label>
+                    <label class="form-label" for="cb-location">Collection Ward / Location <span class="required">*</span></label>
                     <input type="text" id="cb-location" class="form-control" placeholder="e.g. Kothrud Ward 14, Commercial Hub" required>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label" for="cb-date">Collection Date <span class="required">*</span></label>
+                    <label class="form-label" for="cb-date">Pickup Date <span class="required">*</span></label>
                     <input type="date" id="cb-date" class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label" for="cb-vehicle">Vehicle Registration Number <span class="required">*</span></label>
+                    <label class="form-label" for="cb-vehicle">Transport Vehicle Number <span class="required">*</span></label>
                     <input type="text" id="cb-vehicle" class="form-control mono" placeholder="e.g. MH12AB9988" required style="text-transform: uppercase;">
-                    <div class="form-hint">Assigned municipal transport fleet number.</div>
+                    <div class="form-hint">Registered municipal collection truck number.</div>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label" for="cb-driver">Driver Name</label>
+                    <label class="form-label" for="cb-driver">Driver / Crew Lead</label>
                     <input type="text" id="cb-driver" class="form-control" placeholder="e.g. Santosh Pawar">
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="cb-center">Expected Processing Facility <span class="required">*</span></label>
+                  <label class="form-label" for="cb-center">Designated Processing Facility <span class="required">*</span></label>
                   <select id="cb-center" class="form-select" required>
                     <!-- Populated dynamically -->
                   </select>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="cb-notes">Operational Notes / Special Instructions</label>
-                  <textarea id="cb-notes" class="form-control" rows="2" placeholder="e.g. Segregated source pickup; tamper-evident green seal applied to cargo bed."></textarea>
+                  <label class="form-label" for="cb-notes">Cargo Seal &amp; Field Remarks</label>
+                  <textarea id="cb-notes" class="form-control" rows="2" placeholder="e.g. Source segregated; tamper-evident green seal #SEAL-901 applied."></textarea>
                 </div>
 
                 <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 20px;">
                   <button type="reset" class="btn btn-secondary">Clear Form</button>
                   <button type="submit" class="btn btn-primary" id="btn-submit-batch">
-                    <i class="fa-solid fa-qrcode"></i> Generate Batch &amp; QR Passport
+                    <i class="fa-solid fa-qrcode"></i> Generate Batch Passport
                   </button>
                 </div>
               </form>
@@ -119,26 +127,26 @@
             <div class="card" id="preview-result-card">
               <div class="card-header">
                 <div class="card-title">
-                  <i class="fa-solid fa-qrcode text-primary"></i> QR Code Passport Output
+                  <i class="fa-solid fa-qrcode text-primary"></i> Digital Passport Preview
                 </div>
                 <span class="badge badge-neutral" id="preview-badge-status">Awaiting Input</span>
               </div>
-              <div class="card-body text-center" style="padding: 28px 20px;">
+              <div class="card-body text-center" style="padding: 26px 20px;">
                 <div id="preview-qr-box" style="margin-bottom: 16px; min-height: 150px; display: flex; align-items: center; justify-content: center;">
                   <div style="background: var(--slate-100); border: 2px dashed var(--slate-300); border-radius: var(--radius-md); width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; color: var(--slate-400); font-size: 0.78rem;">
-                    [QR Preview]
+                    [QR Output]
                   </div>
                 </div>
 
                 <div id="preview-details" style="display: none;">
-                  <div class="mono" style="font-size: 1.4rem; font-weight: 800; color: var(--primary-800);" id="preview-batch-id">
+                  <div class="mono" style="font-size: 1.4rem; font-weight: 800; color: var(--deep-forest);" id="preview-batch-id">
                     WB-XXXX
                   </div>
-                  <div style="font-size: 0.85rem; font-weight: 600; color: var(--slate-700); margin-top: 4px;" id="preview-batch-sub">
+                  <div style="font-size: 0.85rem; font-weight: 700; color: var(--emerald); margin-top: 4px;" id="preview-batch-sub">
                     Organic • 500 kg
                   </div>
                   <p style="font-size: 0.78rem; color: var(--slate-500); margin: 12px 0 18px;">
-                    This batch has been signed into the municipal trace ledger and saved to localStorage.
+                    This batch has been recorded in the simulated registry and saved to localStorage.
                   </p>
 
                   <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -153,7 +161,7 @@
 
                 <div id="preview-placeholder-text">
                   <p style="font-size: 0.82rem; color: var(--slate-500);">
-                    Complete the registration form to automatically mint a simulated unique Batch ID and generate an official QR passport.
+                    Complete the manifest form to mint a simulated unique Batch ID and generate an official QR passport.
                   </p>
                 </div>
               </div>
@@ -162,11 +170,11 @@
             <!-- Helpful Guidance Card -->
             <div class="card" style="margin-top: 20px; background: var(--slate-50);">
               <div class="card-body" style="font-size: 0.82rem;">
-                <div style="font-weight: 700; color: var(--slate-800); margin-bottom: 6px;">
-                  <i class="fa-solid fa-lightbulb text-warning"></i> Audit Protocol
+                <div style="font-weight: 700; color: var(--dark-charcoal); margin-bottom: 6px;">
+                  <i class="fa-solid fa-lightbulb text-warning"></i> Custody Initiation
                 </div>
-                <p style="color: var(--slate-600); line-height: 1.4;">
-                  All newly registered batches automatically initialize the 6-stage chain of custody timeline at Stage 1 (Waste Collection).
+                <p style="color: var(--slate-600); line-height: 1.45;">
+                  New intake entries automatically initialize Stage 1 (Waste Collection) on the digital chain of custody timeline and issue an in-transit tracking record.
                 </p>
               </div>
             </div>
@@ -182,14 +190,15 @@
   <script src="js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      AuthService.requireAuth();
+      const user = AuthService.requireAuth();
       initAppShell('create-batch');
 
       // Populate centers
       const centerSelect = document.getElementById('cb-center');
       const centers = DataStore.getCenters();
+      const defaultCenter = (user && user.role === 'operator') ? 'Pune Eco-Compost Facility' : '';
       centerSelect.innerHTML = `<option value="">-- Choose Authorized Processing Center --</option>` +
-        centers.map(c => `<option value="${c.name}">${c.name} (${c.type})</option>`).join('');
+        centers.map(c => `<option value="${c.name}" ${c.name === defaultCenter ? 'selected' : ''}>${c.name} (${c.type})</option>`).join('');
 
       // Set default date to today
       document.getElementById('cb-date').value = new Date().toISOString().slice(0, 10);
@@ -239,7 +248,7 @@
               timestamp: `${date} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`, 
               location, 
               status: 'Completed', 
-              notes: notes || `Collection verified: ${quantity} kg ${wasteType} loaded onto ${vehicle}.` 
+              notes: notes || `Field pickup verified: ${quantity} kg ${wasteType} loaded onto ${vehicle}.` 
             },
             { 
               stage: 'Transportation Started', 
@@ -248,7 +257,7 @@
               status: 'Completed', 
               notes: `En route to ${center}. Fleet vehicle ${vehicle}.` 
             },
-            { stage: 'Waste Received', timestamp: 'Pending', location: center, status: 'Pending', notes: 'Awaiting destination gate arrival.' },
+            { stage: 'Waste Received', timestamp: 'Pending', location: center, status: 'Pending', notes: 'Awaiting destination gate weighbridge.' },
             { stage: 'Processing Started', timestamp: 'Pending', location: center, status: 'Pending', notes: 'Scheduled upon receipt.' },
             { stage: 'Processing Completed', timestamp: 'Pending', location: center, status: 'Pending', notes: 'Pending execution.' },
             { stage: 'Final Verification', timestamp: 'Pending', location: 'Municipal QA Portal', status: 'Pending', notes: 'Awaiting process telemetry.' }
@@ -257,7 +266,7 @@
 
         DataStore.saveBatch(newBatch);
 
-        // Also add transit record
+        // Add transit log
         DataStore.saveTransportLog({
           id: `TR-${Math.floor(100 + Math.random() * 900)}`,
           batchId,
@@ -269,7 +278,7 @@
           arrivalTime: 'En Route',
           transferStatus: 'In-Transit',
           gpsCoordinates: '18.5204° N, 73.8567° E',
-          notes: 'New batch dispatched.'
+          notes: 'New batch dispatched from collection point.'
         });
 
         // Show Success Toast
@@ -281,7 +290,7 @@
         document.getElementById('preview-batch-id').textContent = batchId;
         document.getElementById('preview-batch-sub').textContent = `${wasteType} • ${formatKg(quantity)}`;
         document.getElementById('preview-badge-status').textContent = 'Created Active';
-        document.getElementById('preview-badge-status').className = 'badge badge-completed';
+        document.getElementById('preview-badge-status').className = 'badge badge-low';
 
         // Setup link
         document.getElementById('preview-btn-passport').href = `batch-details.html?id=${batchId}`;
@@ -300,8 +309,8 @@
           }),
           width: 140,
           height: 140,
-          colorDark: '#062b1b',
-          colorLight: '#ffffff',
+          colorDark: '#123B32',
+          colorLight: '#FFFFFF',
           correctLevel: QRCode.CorrectLevel.M
         });
 

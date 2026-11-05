@@ -83,7 +83,7 @@ function renderAlertsList() {
     const riskBadge = isHigh ? 'badge-high' : isMed ? 'badge-medium' : 'badge-low';
 
     return `
-      <div class="card" style="margin-bottom: 18px; border-left: 5px solid ${isHigh ? 'var(--danger)' : isMed ? 'var(--warning)' : 'var(--info)'}; opacity: ${a.isReviewed ? '0.75' : '1'};">
+      <div class="card" style="margin-bottom: 18px; border-left: 5px solid ${isHigh ? 'var(--status-red)' : isMed ? 'var(--status-amber)' : 'var(--teal)'}; opacity: ${a.isReviewed ? '0.78' : '1'};">
         <div class="card-header" style="background: ${a.isReviewed ? '#f8fafc' : '#ffffff'};">
           <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <span class="mono" style="font-weight: 800; font-size: 1.1rem; color: var(--slate-900);">${a.batchId}</span>

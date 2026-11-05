@@ -15,29 +15,57 @@
       background-color: var(--bg-app);
     }
     .login-banner {
-      flex: 1.1;
-      background: linear-gradient(135deg, var(--primary-900) 0%, #0d3d28 60%, #062b1b 100%);
-      padding: 60px;
+      flex: 1.15;
+      background: linear-gradient(145deg, var(--primary) 0%, #15272F 60%, #0E1C22 100%);
+      padding: 56px 64px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      color: #ffffff;
+      color: #FFFFFF;
       position: relative;
+      overflow: hidden;
     }
     .login-banner::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+      top: -150px;
+      right: -150px;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(67, 191, 163, 0.18) 0%, transparent 70%);
       pointer-events: none;
+    }
+    .login-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(39, 140, 120, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .login-illustration-wrap {
+      margin: 28px 0;
+      display: flex;
+      justify-content: center;
+      z-index: 2;
+    }
+    .login-illustration-svg {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
     }
     .login-form-pane {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 32px;
-      background: #ffffff;
+      padding: 48px 36px;
+      background: #FFFFFF;
     }
     .login-box {
       width: 100%;
@@ -48,27 +76,28 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 10px 14px;
-      border: 1px dashed var(--slate-300);
+      padding: 12px 16px;
+      border: 1px dashed var(--border-color);
       background: var(--slate-50);
       border-radius: var(--radius-md);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       cursor: pointer;
       transition: all var(--transition-fast);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       text-align: left;
     }
     .demo-pill-btn:hover {
-      background: var(--primary-50);
-      border-color: var(--primary-400);
+      background: var(--soft-mint);
+      border-color: var(--teal);
       border-style: solid;
+      transform: translateY(-1px);
     }
     .password-wrapper {
       position: relative;
     }
     .password-toggle-btn {
       position: absolute;
-      right: 12px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       background: none;
@@ -76,19 +105,23 @@
       color: var(--slate-400);
       cursor: pointer;
       padding: 4px;
+      font-size: 1rem;
     }
-    @media (max-width: 900px) {
+    .password-toggle-btn:hover {
+      color: var(--deep-forest);
+    }
+    @media (max-width: 960px) {
       .login-banner { display: none; }
-      .login-form-pane { padding: 24px 16px; }
+      .login-form-pane { padding: 32px 20px; }
     }
   </style>
 </head>
 <body>
 
   <div class="login-container">
-    <!-- Left Hero Banner -->
+    <!-- Left Hero Banner with Environmental Illustration -->
     <div class="login-banner">
-      <a href="index.html" class="brand-wrapper">
+      <a href="index.html" class="brand-wrapper" style="z-index: 2;">
         <div class="brand-logo-icon">
           <i class="fa-solid fa-recycle"></i>
         </div>
@@ -98,83 +131,133 @@
         </div>
       </a>
 
-      <div style="max-width: 520px; z-index: 2;">
-        <span class="badge badge-low" style="margin-bottom: 16px; background: rgba(16, 185, 129, 0.2); color: var(--primary-300); border-color: rgba(16, 185, 129, 0.4);">
-          <i class="fa-solid fa-leaf"></i> Municipal Clean Technology
+      <!-- Environmental Tech SVG Illustration -->
+      <div class="login-illustration-wrap">
+        <svg class="login-illustration-svg" viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background Grid & Glow -->
+          <circle cx="210" cy="150" r="120" fill="#278C78" fill-opacity="0.14" />
+          <circle cx="210" cy="150" r="85" stroke="#43BFA3" stroke-opacity="0.3" stroke-dasharray="4 4" />
+          
+          <!-- Central City/Facility Hexagon Node -->
+          <polygon points="210,95 255,120 255,175 210,200 165,175 165,120" fill="#203A43" stroke="#43BFA3" stroke-width="2" />
+          
+          <!-- Plant/Facility Silhouette inside Central Node -->
+          <path d="M190 168 V140 L202 148 V140 L214 148 V134 H228 V168 Z" fill="#278C78" />
+          <line x1="184" y1="168" x2="236" y2="168" stroke="#43BFA3" stroke-width="2" />
+          
+          <!-- Green Eco Leaves -->
+          <path d="M210 106 C210 106 218 116 218 124 C218 128 214 132 210 132 C206 132 202 128 202 124 C202 116 210 106 210 106 Z" fill="#43BFA3" />
+
+          <!-- Left Node: Collection Fleet Vehicle -->
+          <circle cx="95" cy="150" r="38" fill="#132228" stroke="#278C78" stroke-width="2" />
+          <!-- Truck Icon Path -->
+          <rect x="78" y="142" width="22" height="14" rx="2" fill="#EAF4F1" />
+          <path d="M100 146 H108 L113 151 V156 H100 Z" fill="#EAF4F1" />
+          <circle cx="85" cy="158" r="3" fill="#203A43" />
+          <circle cx="106" cy="158" r="3" fill="#203A43" />
+          
+          <!-- Right Node: QR Verification & Passport Node -->
+          <circle cx="325" cy="150" r="38" fill="#132228" stroke="#278C78" stroke-width="2" />
+          <!-- Shield & QR Symbol -->
+          <path d="M325 134 L338 139 V149 C338 158 332 165 325 168 C318 165 312 158 312 149 V139 Z" fill="#278C78" />
+          <path d="M321 150 L324 153 L330 146" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Connecting Signal Paths -->
+          <path d="M133 150 H165" stroke="#43BFA3" stroke-width="2" stroke-dasharray="3 3" />
+          <circle cx="149" cy="150" r="3" fill="#43BFA3" />
+          <path d="M255 150 H287" stroke="#43BFA3" stroke-width="2" stroke-dasharray="3 3" />
+          <circle cx="271" cy="150" r="3" fill="#43BFA3" />
+
+          <!-- Top Satellite Telemetry Node -->
+          <circle cx="210" cy="40" r="22" fill="#203A43" stroke="#43BFA3" stroke-width="1.5" />
+          <path d="M205 35 L215 45 M203 40 L213 50 M200 45 L210 55" stroke="#43BFA3" stroke-width="1.5" stroke-linecap="round" />
+          <path d="M210 62 V85" stroke="#278C78" stroke-width="1.5" stroke-dasharray="2 3" />
+
+          <!-- Bottom Metric Pill -->
+          <rect x="145" y="235" width="130" height="26" rx="13" fill="#132228" stroke="#278C78" stroke-width="1.5" />
+          <text x="210" y="252" fill="#EAF4F1" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" text-anchor="middle">LIVE CUSTODY AUDIT</text>
+        </svg>
+      </div>
+
+      <div style="max-width: 480px; z-index: 2;">
+        <span class="badge badge-low" style="margin-bottom: 14px; background: rgba(39, 140, 120, 0.25); color: var(--accent); border-color: rgba(67, 191, 163, 0.4);">
+          <i class="fa-solid fa-shield-halved"></i> Municipal Solid Waste Platform
         </span>
-        <h2 style="font-size: 2.2rem; color: #ffffff; font-weight: 800; line-height: 1.2; margin-bottom: 16px;">
-          Authentic Traceability for Urban Waste Management
+        <h2 style="font-size: 2.1rem; color: #FFFFFF; font-weight: 800; line-height: 1.22; margin-bottom: 14px; letter-spacing: -0.02em;">
+          Authentic Traceability for Urban Waste Custody
         </h2>
-        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px;">
-          Access the municipal command dashboard, verify digital chain of custody from source to processing center, and track simulated AI discrepancy alerts.
+        <p style="color: #E2E8F0; font-size: 0.94rem; line-height: 1.6; margin-bottom: 24px;">
+          Municipal supervisory command dashboard for tracking waste consignments, verifying certified facility handoffs, and triaging simulated AI mass-balance discrepancy alerts.
         </p>
 
-        <div style="display: flex; gap: 24px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 24px;">
+        <div style="display: flex; gap: 24px; border-top: 1px solid rgba(255, 255, 255, 0.12); padding-top: 20px;">
           <div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-300);">100%</div>
-            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Digital Passports</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent);">100%</div>
+            <div style="font-size: 0.72rem; color: #CBD5E1; text-transform: uppercase;">Digital Passports</div>
           </div>
           <div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-300);">6 Stages</div>
-            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Chain of Custody</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent);">6 Stages</div>
+            <div style="font-size: 0.72rem; color: #CBD5E1; text-transform: uppercase;">Chain of Custody</div>
           </div>
           <div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-300);">AI Guard</div>
-            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Discrepancy Alerts</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent);">AI Guard</div>
+            <div style="font-size: 0.72rem; color: #CBD5E1; text-transform: uppercase;">Discrepancy Triage</div>
           </div>
         </div>
       </div>
 
-      <div style="font-size: 0.75rem; color: #64748b; z-index: 2;">
-        © 2026 Smart Waste Trace • Municipal Waste Traceability &amp; Verification System.
+      <div style="font-size: 0.75rem; color: rgba(226, 232, 240, 0.6); z-index: 2; margin-top: 20px;">
+        © 2026 Smart Waste Trace • Track. Verify. Transform.
       </div>
     </div>
 
-    <!-- Right Login Form -->
+    <!-- Right Login Form Pane -->
     <div class="login-form-pane">
       <div class="login-box">
-        <div style="margin-bottom: 28px;">
-          <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--slate-900);">Sign In to Portal</h2>
+        <div style="margin-bottom: 26px;">
+          <h2 style="font-size: 1.65rem; font-weight: 800; color: var(--dark-charcoal); letter-spacing: -0.02em;">Sign In to Portal</h2>
           <p style="font-size: 0.88rem; color: var(--slate-500); margin-top: 4px;">
-            Enter your credentials or choose a 1-click demo role below.
+            Enter municipal credentials or choose a 1-click demo role below.
           </p>
         </div>
 
-        <!-- 1-Click Demo Credential Chooser -->
+        <!-- 1-Click Fast Demo Login Buttons -->
         <div style="margin-bottom: 22px;">
-          <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--slate-500); margin-bottom: 8px;">
-            <i class="fa-solid fa-bolt text-warning"></i> Fast Demo Login (1-Click)
+          <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: var(--slate-500); margin-bottom: 8px; letter-spacing: 0.05em;">
+            <i class="fa-solid fa-bolt text-warning"></i> Fast 1-Click Demo Login
           </div>
+
           <button type="button" class="demo-pill-btn" onclick="fillDemoCredentials('admin')">
             <div>
-              <div style="font-weight: 700; color: var(--slate-900);">
-                <i class="fa-solid fa-user-tie text-primary" style="margin-right: 6px;"></i> Municipal Admin
+              <div style="font-weight: 700; color: var(--dark-charcoal);">
+                <i class="fa-solid fa-user-shield text-primary" style="margin-right: 6px;"></i> Municipal Admin (Supervisory)
               </div>
               <div style="font-size: 0.75rem; color: var(--slate-500);">admin@smartwastetrace.gov.in</div>
             </div>
-            <span class="badge badge-completed">Full Access</span>
+            <span class="badge badge-low">Full Oversight</span>
           </button>
+
           <button type="button" class="demo-pill-btn" onclick="fillDemoCredentials('operator')">
             <div>
-              <div style="font-weight: 700; color: var(--slate-900);">
-                <i class="fa-solid fa-industry text-primary" style="margin-right: 6px;"></i> Processing Operator
+              <div style="font-weight: 700; color: var(--dark-charcoal);">
+                <i class="fa-solid fa-industry text-primary" style="margin-right: 6px;"></i> Processing Center Operator
               </div>
               <div style="font-size: 0.75rem; color: var(--slate-500);">operator@ecocompost.in</div>
             </div>
-            <span class="badge badge-low">Plant Ops</span>
+            <span class="badge badge-in-transit">Facility Ops</span>
           </button>
         </div>
 
         <form id="login-form">
           <div class="form-group">
-            <label class="form-label" for="login-email">Email Address <span class="required">*</span></label>
+            <label class="form-label" for="login-email">Official Email Address <span class="required">*</span></label>
             <input type="email" id="login-email" class="form-control" placeholder="name@smartwastetrace.gov.in" required>
           </div>
 
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <label class="form-label" for="login-password" style="margin-bottom: 0;">Password <span class="required">*</span></label>
-              <a href="javascript:void(0)" onclick="showToast('Password reset link simulated to registered email.', 'info')" style="font-size: 0.75rem;">Forgot password?</a>
+              <a href="javascript:void(0)" onclick="showToast('Simulated password reset sent to registered email.', 'info')" style="font-size: 0.76rem; font-weight: 600; color: var(--emerald);">Forgot password?</a>
             </div>
             <div class="password-wrapper">
               <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
@@ -187,17 +270,17 @@
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;">
             <label class="form-check">
               <input type="checkbox" id="login-remember" class="form-check-input" checked>
-              <span style="font-size: 0.82rem; color: var(--slate-600);">Remember me on this browser</span>
+              <span style="font-size: 0.82rem; color: var(--slate-600);">Remember this browser session</span>
             </label>
           </div>
 
           <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem;">
-            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In to Command Portal
           </button>
         </form>
 
         <div style="text-align: center; margin-top: 24px; font-size: 0.82rem; color: var(--slate-500);">
-          Need municipal access credentials? <a href="javascript:void(0)" onclick="showToast('Please contact PMC SWM IT Administrator for registration.', 'info')">Contact Administrator</a>
+          Need PMC access clearance? <a href="javascript:void(0)" onclick="showToast('Contact PMC Solid Waste IT Support desk.', 'info')" style="color: var(--emerald); font-weight: 600;">Contact Administrator</a>
         </div>
       </div>
     </div>
@@ -234,7 +317,7 @@
 
         const res = AuthService.login(email, password, role);
         if (res.success) {
-          showToast(`Welcome back, ${res.user.name}! Accessing ${res.user.roleLabel}...`, 'success');
+          showToast(`Welcome, ${res.user.name}! Redirecting to ${res.user.roleLabel}...`, 'success');
           setTimeout(() => {
             window.location.href = 'dashboard.html';
           }, 600);

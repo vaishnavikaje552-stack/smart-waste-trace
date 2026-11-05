@@ -97,8 +97,8 @@ function renderPassportQR(batch) {
       text: payload,
       width: 140,
       height: 140,
-      colorDark: '#062b1b',
-      colorLight: '#ffffff',
+      colorDark: '#203A43',
+      colorLight: '#FFFFFF',
       correctLevel: QRCode.CorrectLevel.M
     });
   } else {

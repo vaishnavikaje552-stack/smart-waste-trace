@@ -72,7 +72,7 @@ function renderIntegrityView(batch, integrity) {
     const circumference = 440; // 2 * pi * 70
     const offset = circumference - (integrity.totalScore / 100) * circumference;
     circleProgress.style.strokeDashoffset = offset;
-    circleProgress.style.stroke = integrity.totalScore >= 70 ? 'var(--primary-500)' : integrity.totalScore >= 50 ? 'var(--warning)' : 'var(--danger)';
+    circleProgress.style.stroke = integrity.totalScore >= 70 ? 'var(--secondary)' : integrity.totalScore >= 50 ? 'var(--status-amber)' : 'var(--status-red)';
   }
 
   // 4 Factors Breakdown
@@ -86,7 +86,7 @@ function renderIntegrityView(batch, integrity) {
   const explanationContainer = document.getElementById('integrity-explanations-list');
   if (explanationContainer) {
     explanationContainer.innerHTML = integrity.explanations.map(exp => `
-      <div style="background: var(--slate-50); border-left: 3px solid var(--primary-600); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 0.85rem; color: var(--slate-700);">
+      <div style="background: var(--background); border-left: 3px solid var(--secondary); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 0.85rem; color: var(--text-primary);">
         <i class="fa-solid fa-circle-check text-primary" style="margin-right: 6px;"></i>
         ${exp}
       </div>
@@ -109,6 +109,6 @@ function updateFactorCard(valId, barId, score, max) {
   if (valEl) valEl.textContent = `${score} / ${max} pts (${pct}%)`;
   if (barEl) {
     barEl.style.width = `${pct}%`;
-    barEl.style.background = pct >= 80 ? 'var(--primary-500)' : pct >= 50 ? 'var(--warning)' : 'var(--danger)';
+    barEl.style.background = pct >= 80 ? 'var(--emerald)' : pct >= 50 ? 'var(--status-amber)' : 'var(--status-red)';
   }
 }

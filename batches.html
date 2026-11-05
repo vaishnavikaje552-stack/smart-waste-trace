@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Waste Batch Management | Smart Waste Trace</title>
+  <title>Waste Batch Oversight Registry | Smart Waste Trace</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dashboard.css">
@@ -21,24 +21,27 @@
         <!-- Content Header -->
         <div class="content-header">
           <div>
-            <div class="content-header-title">Waste Batch Registry</div>
-            <div class="content-header-subtitle">
-              Manage, search, and monitor municipal waste batches from origin to disposal.
+            <div class="content-header-title" id="batches-page-title">Waste Batch Oversight Registry</div>
+            <div class="content-header-subtitle" id="batches-page-subtitle">
+              Supervise municipal waste consignments, inspect digital passports, and track custody progression.
             </div>
           </div>
-          <div class="content-header-actions">
-            <button class="btn btn-secondary" onclick="exportBatchesToCSV()">
-              <i class="fa-solid fa-file-csv"></i> Export CSV
-            </button>
-            <a href="create-batch.html" class="btn btn-primary">
+          <div class="content-header-actions" id="batches-header-actions">
+            <a href="create-batch.html" class="btn btn-primary" id="btn-operator-create-batch" style="display: none;">
               <i class="fa-solid fa-plus-circle"></i> Create New Batch
             </a>
+            <a href="qr-tracking.html" class="btn btn-secondary">
+              <i class="fa-solid fa-qrcode"></i> Scan QR Passport
+            </a>
+            <button class="btn btn-secondary" onclick="exportBatchesToCSV()">
+              <i class="fa-solid fa-file-csv"></i> Export Manifest CSV
+            </button>
           </div>
         </div>
 
         <!-- Filter Bar -->
         <div class="filter-bar">
-          <div class="filter-group" style="flex: 1; min-width: 240px;">
+          <div class="filter-group" style="flex: 1; min-width: 250px;">
             <div style="position: relative; width: 100%;">
               <input type="text" id="batch-search-input" class="form-control" placeholder="Search Batch ID, Location, Vehicle, Center..." style="padding-left: 36px;">
               <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--slate-400);"></i>
@@ -46,8 +49,16 @@
           </div>
 
           <div class="filter-group">
-            <select id="filter-waste-type" class="form-select" style="width: 160px;">
-              <option value="">All Waste Types</option>
+            <select id="filter-facility" class="form-select" style="max-width: 210px;">
+              <option value="">All Processing Facilities</option>
+              <option value="Pune Eco-Compost Facility">Pune Eco-Compost Facility</option>
+              <option value="Hadapsar Plastic Recovery Center">Hadapsar Plastic Recovery Center</option>
+              <option value="Bhavani Peth RDF Facility">Bhavani Peth RDF Facility</option>
+              <option value="Kothrud E-Waste Recyclers">Kothrud E-Waste Recyclers</option>
+            </select>
+
+            <select id="filter-waste-type" class="form-select" style="width: 155px;">
+              <option value="">All Categories</option>
               <option value="Organic">Organic</option>
               <option value="Plastic">Plastic</option>
               <option value="Paper">Paper</option>
@@ -56,14 +67,14 @@
               <option value="Mixed Waste">Mixed Waste</option>
             </select>
 
-            <select id="filter-status" class="form-select" style="width: 170px;">
+            <select id="filter-status" class="form-select" style="width: 165px;">
               <option value="">All Statuses</option>
-              <option value="Completed">Completed</option>
-              <option value="In-Transit">In-Transit</option>
+              <option value="Completed">Completed &amp; Verified</option>
+              <option value="In-Transit">In-Transit Fleet</option>
               <option value="Discrepancy Flagged">Discrepancy Flagged</option>
             </select>
 
-            <select id="filter-risk" class="form-select" style="width: 150px;">
+            <select id="filter-risk" class="form-select" style="width: 145px;">
               <option value="">All Risk Levels</option>
               <option value="Low">Low Risk</option>
               <option value="Medium">Medium Risk</option>
@@ -81,8 +92,8 @@
           <span id="batch-count-display" style="font-size: 0.85rem; font-weight: 700; color: var(--slate-600);">
             Showing batches...
           </span>
-          <span style="font-size: 0.78rem; color: var(--slate-400);">
-            <i class="fa-solid fa-lock text-success"></i> SHA-256 Mocked Hash Records
+          <span class="simulated-pill">
+            <i class="fa-solid fa-shield-check"></i> Municipal Verification Active
           </span>
         </div>
 
@@ -96,7 +107,7 @@
                   <th>Waste Type</th>
                   <th>Collected Qty</th>
                   <th>Location &amp; Date</th>
-                  <th>Vehicle</th>
+                  <th>Fleet Vehicle</th>
                   <th>Assigned Center</th>
                   <th>Status</th>
                   <th>Risk Level</th>

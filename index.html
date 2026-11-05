@@ -11,100 +11,112 @@
   <style>
     .hero-section {
       min-height: 100vh;
-      background: radial-gradient(circle at top right, #0d3d28 0%, #062b1b 60%, #03170e 100%);
-      color: #ffffff;
+      background: radial-gradient(circle at 85% 15%, #1A3E47 0%, var(--primary) 55%, #0F1C20 100%);
+      color: #FFFFFF;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
     }
     .hero-nav {
-      height: 80px;
+      height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 48px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 10;
     }
     .hero-content {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 24px;
+      padding: 44px 20px;
       text-align: center;
+      z-index: 5;
     }
     .hero-card {
-      max-width: 840px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
+      max-width: 860px;
+      background: rgba(32, 58, 67, 0.55);
+      border: 1px solid rgba(67, 191, 163, 0.25);
+      backdrop-filter: blur(14px);
       padding: 48px 40px;
       border-radius: var(--radius-xl);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 60px -12px rgba(15, 28, 32, 0.7);
     }
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      color: var(--primary-300);
-      font-size: 0.82rem;
+      background: rgba(39, 140, 120, 0.2);
+      border: 1px solid rgba(67, 191, 163, 0.4);
+      color: var(--accent);
+      font-size: 0.8rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       padding: 6px 14px;
       border-radius: var(--radius-full);
       margin-bottom: 20px;
     }
     .hero-title {
-      font-size: 2.8rem;
+      font-size: 2.7rem;
       font-weight: 800;
-      color: #ffffff;
+      color: #FFFFFF;
       letter-spacing: -0.03em;
       line-height: 1.15;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .hero-title span {
-      background: linear-gradient(135deg, var(--primary-400), #a7f3d0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent);
     }
     .hero-desc {
-      font-size: 1.1rem;
-      color: #cbd5e1;
-      max-width: 650px;
-      margin: 0 auto 32px;
+      font-size: 1.05rem;
+      color: #E2E8F0;
+      max-width: 680px;
+      margin: 0 auto 30px;
       line-height: 1.6;
     }
     .hero-features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
-      margin-top: 40px;
+      margin-top: 36px;
       text-align: left;
     }
     .hero-feat-item {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       padding: 16px;
       border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+    }
+    .hero-feat-item:hover {
+      background: rgba(39, 140, 120, 0.15);
+      border-color: rgba(67, 191, 163, 0.35);
+      transform: translateY(-2px);
     }
     .hero-feat-item i {
-      color: var(--primary-400);
-      font-size: 1.2rem;
+      color: var(--accent);
+      font-size: 1.25rem;
       margin-bottom: 8px;
       display: block;
     }
     .hero-feat-item h4 {
-      color: #ffffff;
-      font-size: 0.95rem;
+      color: #FFFFFF;
+      font-size: 0.92rem;
       margin-bottom: 4px;
     }
     .hero-feat-item p {
-      color: #94a3b8;
-      font-size: 0.78rem;
+      color: #CBD5E1;
+      font-size: 0.77rem;
+      line-height: 1.4;
+    }
+    @media (max-width: 768px) {
+      .hero-nav { padding: 0 20px; }
+      .hero-card { padding: 32px 20px; }
+      .hero-title { font-size: 2rem; }
     }
   </style>
 </head>
@@ -123,11 +135,11 @@
       </a>
 
       <div style="display: flex; gap: 12px;">
-        <a href="login.html" class="btn btn-secondary btn-sm" style="background: transparent; color: #fff; border-color: rgba(255,255,255,0.3);">
-          <i class="fa-solid fa-right-to-bracket"></i> Login
+        <a href="login.html" class="btn btn-secondary btn-sm" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.35);">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
         </a>
         <a href="dashboard.html" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-gauge-high"></i> Open Dashboard
+          <i class="fa-solid fa-gauge-high"></i> Command Center
         </a>
       </div>
     </nav>
@@ -135,24 +147,24 @@
     <div class="hero-content">
       <div class="hero-card">
         <div class="hero-badge">
-          <i class="fa-solid fa-shield-halved"></i> Municipal Compliance & Digital Custody
+          <i class="fa-solid fa-shield-halved"></i> Municipal Solid Waste Traceability &amp; Oversight
         </div>
         <h1 class="hero-title">
           Smart Waste Traceability &amp; <span>Verification System</span>
         </h1>
         <p class="hero-desc">
-          An end-to-end municipal platform for tracking waste batches, verifying digital chains of custody, scanning QR passports, and identifying high-risk journey anomalies with AI monitoring.
+          An environmental technology monitoring platform for tracking urban waste consignments, verifying 6-stage digital chains of custody, scanning optical QR passports, and identifying high-risk mass deviations.
         </p>
 
-        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
           <a href="login.html" class="btn btn-primary btn-lg">
-            <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Portal
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Access Command Portal
           </a>
-          <button class="btn btn-secondary btn-lg" onclick="loginDirect('admin')" style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25);">
-            <i class="fa-solid fa-user-tie"></i> Demo as Municipal Admin
+          <button class="btn btn-secondary btn-lg" onclick="loginDirect('admin')" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.3);">
+            <i class="fa-solid fa-user-shield"></i> Demo as Municipal Admin
           </button>
-          <button class="btn btn-secondary btn-lg" onclick="loginDirect('operator')" style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25);">
-            <i class="fa-solid fa-industry"></i> Demo as Processing Operator
+          <button class="btn btn-secondary btn-lg" onclick="loginDirect('operator')" style="background: rgba(255,255,255,0.12); color: #FFFFFF; border-color: rgba(255,255,255,0.3);">
+            <i class="fa-solid fa-industry"></i> Demo as Facility Operator
           </button>
         </div>
 
@@ -160,22 +172,22 @@
           <div class="hero-feat-item">
             <i class="fa-solid fa-passport"></i>
             <h4>Waste Digital Passport</h4>
-            <p>Cryptographically verified batch identity with embedded QR codes & metrics.</p>
+            <p>Certified batch identity with encrypted QR payloads and mass metrics.</p>
           </div>
           <div class="hero-feat-item">
             <i class="fa-solid fa-timeline"></i>
             <h4>Digital Chain of Custody</h4>
-            <p>Chronological tracking across 6 custodial milestones from collection to recovery.</p>
+            <p>Chronological tracking across 6 custodial milestones from pickup to recovery.</p>
           </div>
           <div class="hero-feat-item">
             <i class="fa-solid fa-brain"></i>
-            <h4>AI Risk Detection</h4>
-            <p>Simulated detection of quantity deficits, missing confirmations & route deviations.</p>
+            <h4>AI Anomaly Detection</h4>
+            <p>Simulated detection of quantity deficits, missing confirmations &amp; route delays.</p>
           </div>
           <div class="hero-feat-item">
             <i class="fa-solid fa-gauge-high"></i>
             <h4>Integrity Score</h4>
-            <p>Algorithmic trustworthiness index calculated on 4 municipal audit factors.</p>
+            <p>Algorithmic trustworthiness index calculated across 4 municipal audit pillars.</p>
           </div>
         </div>
       </div>
@@ -194,14 +206,6 @@
         window.location.href = 'dashboard.html';
       }, 500);
     }
-
-    // Auto-redirect if already authenticated
-    document.addEventListener('DOMContentLoaded', () => {
-      const user = AuthService.getUser();
-      if (user) {
-        // Can optionally auto redirect, or leave landing accessible
-      }
-    });
   </script>
 </body>
 </html>

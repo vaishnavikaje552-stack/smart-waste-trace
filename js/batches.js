@@ -7,14 +7,31 @@ let allBatches = [];
 let filteredBatches = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  AuthService.requireAuth();
+  const user = AuthService.requireAuth();
   initAppShell('batches');
-  initBatchManagement();
+  initBatchManagement(user);
 });
 
-function initBatchManagement() {
+function initBatchManagement(user) {
   allBatches = DataStore.getBatches();
   filteredBatches = [...allBatches];
+
+  // Role Customization
+  const isOperator = user && user.role === 'operator';
+  const opCreateBtn = document.getElementById('btn-operator-create-batch');
+  const titleEl = document.getElementById('batches-page-title');
+  const subEl = document.getElementById('batches-page-subtitle');
+  const facilityFilter = document.getElementById('filter-facility');
+
+  if (isOperator) {
+    if (opCreateBtn) opCreateBtn.style.display = 'inline-flex';
+    if (titleEl) titleEl.textContent = 'My Waste Batches';
+    if (subEl) subEl.textContent = 'Monitor incoming consignments allocated to Pune Eco-Compost Facility, record intake passports, and verify custody.';
+  } else {
+    if (opCreateBtn) opCreateBtn.style.display = 'none';
+    if (titleEl) titleEl.textContent = 'Waste Batch Oversight Registry';
+    if (subEl) subEl.textContent = 'Supervise municipal waste consignments, inspect digital passports, and track custody progression.';
+  }
 
   // Populate filter dropdowns if needed
   setupFilterListeners();
@@ -23,12 +40,14 @@ function initBatchManagement() {
 
 function setupFilterListeners() {
   const searchInput = document.getElementById('batch-search-input');
+  const facilityFilter = document.getElementById('filter-facility');
   const typeFilter = document.getElementById('filter-waste-type');
   const statusFilter = document.getElementById('filter-status');
   const riskFilter = document.getElementById('filter-risk');
 
   const applyFilters = () => {
     const query = (searchInput.value || '').trim().toLowerCase();
+    const facility = facilityFilter ? facilityFilter.value : '';
     const type = typeFilter.value;
     const status = statusFilter.value;
     const risk = riskFilter.value;
@@ -40,17 +59,19 @@ function setupFilterListeners() {
         b.vehicleNumber.toLowerCase().includes(query) ||
         b.assignedCenter.toLowerCase().includes(query);
 
+      const matchesFacility = !facility || b.assignedCenter === facility;
       const matchesType = !type || b.wasteType === type;
       const matchesStatus = !status || b.status === status;
       const matchesRisk = !risk || b.riskLevel === risk;
 
-      return matchesSearch && matchesType && matchesStatus && matchesRisk;
+      return matchesSearch && matchesFacility && matchesType && matchesStatus && matchesRisk;
     });
 
     renderBatchesTable();
   };
 
   if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (facilityFilter) facilityFilter.addEventListener('change', applyFilters);
   if (typeFilter) typeFilter.addEventListener('change', applyFilters);
   if (statusFilter) statusFilter.addEventListener('change', applyFilters);
   if (riskFilter) riskFilter.addEventListener('change', applyFilters);
@@ -58,6 +79,8 @@ function setupFilterListeners() {
 
 function resetFilters() {
   document.getElementById('batch-search-input').value = '';
+  const facilityFilter = document.getElementById('filter-facility');
+  if (facilityFilter) facilityFilter.value = '';
   document.getElementById('filter-waste-type').value = '';
   document.getElementById('filter-status').value = '';
   document.getElementById('filter-risk').value = '';
